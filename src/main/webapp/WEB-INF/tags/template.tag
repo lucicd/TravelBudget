@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ tag description="Overall Page template" pageEncoding="UTF-8" %>
+<%@ tag description="Overall Page Template" pageEncoding="UTF-8" %>
 <%@ attribute name="title" required="true" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +16,7 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-            <a class="navbar-brand" href="/TravelBudget/home">Travel Budget</a>
+            <a class="navbar-brand" href="/TravelBudget">Travel Budget</a>
             <button class="navbar-toggler" 
                     type="button" 
                     data-toggle="collapse" 
@@ -30,7 +30,7 @@
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="/TravelBudget/home">
+                        <a class="nav-link" href="/TravelBudget">
                             Home <span class="sr-only">(current)</span>
                         </a>
                     </li>
