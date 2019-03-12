@@ -1,3 +1,5 @@
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="lucicd.travelbudget.model.Currency"%>
@@ -12,8 +14,28 @@
     data.add(new Currency(7, "HRK"));
     request.setAttribute("data", data);
 %>
-
-<jsp:include page="../shared/template.jsp">
-    <jsp:param name="content" value="../currency/list_content"/>
-    <jsp:param name="title" value="Currencies"/>
-</jsp:include>
+<t:template title="Currencies">
+    <jsp:body>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="item" items="${requestScope.data}">
+                    <tr>
+                        <td>${item.getId()}</td>
+                        <td>${item.getName()}</td>
+                        <td>
+                            <a href="#">Edit</a>
+                            <a href="#">Delete</a>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+    </jsp:body>
+</t:template>
