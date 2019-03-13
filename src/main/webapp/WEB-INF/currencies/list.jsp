@@ -1,21 +1,9 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@page import="java.util.List"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="lucicd.travelbudget.model.Currency"%>
-<%
-    List<Currency> data = new ArrayList<>();
-    data.add(new Currency(1, "AED"));
-    data.add(new Currency(2, "USD"));
-    data.add(new Currency(3, "EUR"));
-    data.add(new Currency(4, "JPY"));
-    data.add(new Currency(5, "PHP"));
-    data.add(new Currency(6, "GBP"));
-    data.add(new Currency(7, "HRK"));
-    request.setAttribute("data", data);
-%>
 <t:template title="Currencies">
     <jsp:body>
+        <h1>Currencies</h1>
+        <a href="./currencies?action=create">Create</a>
         <table>
             <thead>
                 <tr>
@@ -30,8 +18,8 @@
                         <td>${item.getId()}</td>
                         <td>${item.getName()}</td>
                         <td>
-                            <a href="#">Edit</a>
-                            <a href="#">Delete</a>
+                            <a href="./currencies?action=edit&id=${item.getId()}">Edit</a>
+                            <a href="./currencies?action=delete&id=${item.getId()}">Delete</a>
                         </td>
                     </tr>
                 </c:forEach>

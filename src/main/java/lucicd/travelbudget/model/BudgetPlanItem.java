@@ -31,18 +31,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "budget_plan_items")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "BudgetPlanItem.findAll", query = "SELECT b FROM BudgetPlanItem b"),
-    @NamedQuery(name = "BudgetPlanItem.findById", query = "SELECT b FROM BudgetPlanItem b WHERE b.id = :id"),
-    @NamedQuery(name = "BudgetPlanItem.findByItemDescription", query = "SELECT b FROM BudgetPlanItem b WHERE b.itemDescription = :itemDescription"),
-    @NamedQuery(name = "BudgetPlanItem.findByUrl", query = "SELECT b FROM BudgetPlanItem b WHERE b.url = :url"),
-    @NamedQuery(name = "BudgetPlanItem.findByStartDate", query = "SELECT b FROM BudgetPlanItem b WHERE b.startDate = :startDate"),
-    @NamedQuery(name = "BudgetPlanItem.findByCompletionDate", query = "SELECT b FROM BudgetPlanItem b WHERE b.completionDate = :completionDate"),
-    @NamedQuery(name = "BudgetPlanItem.findByCostInCurrency", query = "SELECT b FROM BudgetPlanItem b WHERE b.costInCurrency = :costInCurrency"),
-    @NamedQuery(name = "BudgetPlanItem.findByExchangeRate", query = "SELECT b FROM BudgetPlanItem b WHERE b.exchangeRate = :exchangeRate"),
-    @NamedQuery(name = "BudgetPlanItem.findByStatus", query = "SELECT b FROM BudgetPlanItem b WHERE b.status = :status"),
-    @NamedQuery(name = "BudgetPlanItem.findByComments", query = "SELECT b FROM BudgetPlanItem b WHERE b.comments = :comments")})
 public class BudgetPlanItem implements Serializable {
 
     private static final long serialVersionUID = 1L;

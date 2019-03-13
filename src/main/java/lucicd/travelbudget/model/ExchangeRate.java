@@ -27,11 +27,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "exchange_rates")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "ExchangeRate.findAll", query = "SELECT e FROM ExchangeRate e"),
-    @NamedQuery(name = "ExchangeRate.findById", query = "SELECT e FROM ExchangeRate e WHERE e.id = :id"),
-    @NamedQuery(name = "ExchangeRate.findByCurrentExchangeRate", query = "SELECT e FROM ExchangeRate e WHERE e.currentExchangeRate = :currentExchangeRate")})
 public class ExchangeRate implements Serializable {
 
     private static final long serialVersionUID = 1L;

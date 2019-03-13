@@ -30,6 +30,10 @@ public class Currency implements Serializable {
     public Currency(Integer id) {
         this.id = id;
     }
+    
+    public Currency(String name) {
+        this.name = name;
+    }
 
     public Currency(Integer id, String name) {
         this.id = id;

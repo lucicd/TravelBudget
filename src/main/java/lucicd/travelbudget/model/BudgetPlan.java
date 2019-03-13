@@ -18,15 +18,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
@@ -35,14 +32,6 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "budget_plans")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "BudgetPlan.findAll", query = "SELECT b FROM BudgetPlan b"),
-    @NamedQuery(name = "BudgetPlan.findById", query = "SELECT b FROM BudgetPlan b WHERE b.id = :id"),
-    @NamedQuery(name = "BudgetPlan.findByTravelDate", query = "SELECT b FROM BudgetPlan b WHERE b.travelDate = :travelDate"),
-    @NamedQuery(name = "BudgetPlan.findByTravelDestination", query = "SELECT b FROM BudgetPlan b WHERE b.travelDestination = :travelDestination"),
-    @NamedQuery(name = "BudgetPlan.findByAvailableBudget", query = "SELECT b FROM BudgetPlan b WHERE b.availableBudget = :availableBudget"),
-    @NamedQuery(name = "BudgetPlan.findByComments", query = "SELECT b FROM BudgetPlan b WHERE b.comments = :comments")})
 public class BudgetPlan implements Serializable {
 
     private static final long serialVersionUID = 1L;

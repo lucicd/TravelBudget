@@ -26,13 +26,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "settings")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Setting.findAll", query = "SELECT s FROM Setting s"),
-    @NamedQuery(name = "Setting.findById", query = "SELECT s FROM Setting s WHERE s.id = :id"),
-    @NamedQuery(name = "Setting.findByName", query = "SELECT s FROM Setting s WHERE s.name = :name"),
-    @NamedQuery(name = "Setting.findByTextValue", query = "SELECT s FROM Setting s WHERE s.textValue = :textValue"),
-    @NamedQuery(name = "Setting.findByNumberValue", query = "SELECT s FROM Setting s WHERE s.numberValue = :numberValue")})
 public class Setting implements Serializable {
 
     private static final long serialVersionUID = 1L;

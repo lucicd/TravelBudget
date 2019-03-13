@@ -16,7 +16,7 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-            <a class="navbar-brand" href="/TravelBudget">Travel Budget</a>
+            <a class="navbar-brand" href="./">Travel Budget</a>
             <button class="navbar-toggler" 
                     type="button" 
                     data-toggle="collapse" 
@@ -30,12 +30,12 @@
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="/TravelBudget">
+                        <a class="nav-link" href="./">
                             Home <span class="sr-only">(current)</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/TravelBudget/currencies">Currencies</a>
+                        <a class="nav-link" href="currencies">Currencies</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link disabled" 
@@ -63,7 +63,6 @@
         
         <main role="main" class="container">
             <div class="starter-template">
-                <h1>${title}</h1>
                 <jsp:doBody />
             </div>
         </main>
