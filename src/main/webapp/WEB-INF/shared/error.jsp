@@ -1,14 +1,6 @@
-<%@page isErrorPage="true"%> 
-<!DOCTYPE html>
-<html> 
-    <head>
-        <title>Error</title>
-    </head>  
-    <body>
-        An error has occurred. <br/> 
-        Error message:
-        <%
-            out.println(exception.toString());
-        %>
-    </body>
-</html>
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<t:template title="An error has occured">
+    <jsp:body>
+        Error message: ${requestScope.error}
+    </jsp:body>
+</t:template>

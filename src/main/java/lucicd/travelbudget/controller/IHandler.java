@@ -1,11 +1,10 @@
 package lucicd.travelbudget.controller;
 
-import java.io.IOException;
-import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import lucicd.travelbudget.exceptions.AppException;
 
-public interface Handler {
+public interface IHandler {
     public void handleIt(ServletRequest req, ServletResponse res)
-            throws ServletException, IOException;
+            throws AppException;
 }

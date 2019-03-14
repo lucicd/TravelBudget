@@ -1,6 +1,6 @@
 package lucicd.travelbudget.model;
 
-import lucicd.travelbudget.exceptions.ModelException;
+import lucicd.travelbudget.exceptions.AppException;
 import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -27,7 +27,7 @@ public class CurrencyDAO {
         return singleInstance;
     }
     
-    public List<Currency> getCurrencies() throws ModelException
+    public List<Currency> getCurrencies() throws AppException
     {
         try {
             session = factory.openSession();
@@ -39,13 +39,13 @@ public class CurrencyDAO {
             return currencies;
         } catch(HibernateException ex) {
             session.getTransaction().rollback();
-            throw new ModelException("Failed to get currencies. " + ex.getMessage());
+            throw new AppException("Failed to get currencies. " + ex.getMessage());
         } finally {
             session.close();
         }
     }
     
-    public Currency getCurrency(int id) throws ModelException
+    public Currency getCurrency(int id) throws AppException
     {
         try {
             session = factory.openSession();
@@ -58,13 +58,13 @@ public class CurrencyDAO {
             return currency;
         } catch (HibernateException ex) {
             session.getTransaction().rollback();
-            throw new ModelException("Failed to get currency. " + ex.getMessage());
+            throw new AppException("Failed to get currency. " + ex.getMessage());
         } finally {
             session.close();
         }
     }
     
-    public Integer addCurrency(Currency currency) throws ModelException
+    public Integer addCurrency(Currency currency) throws AppException
     {
         try {
             session = factory.openSession();
@@ -74,13 +74,13 @@ public class CurrencyDAO {
             return id;
         } catch (HibernateException ex) {
             session.getTransaction().rollback();
-            throw new ModelException("Failed to add currency. " + ex.getMessage());
+            throw new AppException("Failed to add currency. " + ex.getMessage());
         } finally {
             session.close();
         }
     }
     
-    public Long getCount() throws ModelException
+    public Long getCount() throws AppException
     {
         try {
             session = factory.openSession();
@@ -92,13 +92,13 @@ public class CurrencyDAO {
             return count; 
         } catch (HibernateException ex) {
             session.getTransaction().rollback();
-            throw new ModelException("Failed to count currencies. " + ex.getMessage());
+            throw new AppException("Failed to count currencies. " + ex.getMessage());
         } finally {
             session.close();
         }
     }
     
-    public void truncate() throws ModelException
+    public void truncate() throws AppException
     {
          try {
             session = factory.openSession();
@@ -110,7 +110,7 @@ public class CurrencyDAO {
             session.getTransaction().commit();
         } catch (HibernateException ex) {
             session.getTransaction().rollback();
-             throw new ModelException("Failed to truncate currencies table. " + ex.getMessage());
+             throw new AppException("Failed to truncate currencies table. " + ex.getMessage());
         } finally {
             session.close();
         }
