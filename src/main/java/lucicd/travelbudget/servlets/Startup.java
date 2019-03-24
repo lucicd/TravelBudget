@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
-import lucicd.travelbudget.exceptions.ModelException;
+import lucicd.travelbudget.exceptions.AppException;
 import lucicd.travelbudget.model.Currency;
 import lucicd.travelbudget.model.CurrencyDAO;
 
@@ -26,7 +26,7 @@ public class Startup implements ServletContextListener  {
                 dao.addCurrency(new Currency("GBP"));
                 dao.addCurrency(new Currency("HRK"));
             }
-        } catch (ModelException ex) {
+        } catch (AppException ex) {
             Logger.getLogger(Startup.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
