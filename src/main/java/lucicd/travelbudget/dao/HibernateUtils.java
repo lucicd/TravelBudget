@@ -1,4 +1,4 @@
-package lucicd.travelbudget.model;
+package lucicd.travelbudget.dao;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;

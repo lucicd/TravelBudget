@@ -53,11 +53,11 @@ Contributor(s):
     <property name="hibernate.cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
     <!-- Echo all executed SQL to stdout -->
     <property name="hibernate.show_sql">true</property>
-    <mapping class="lucicd.travelbudget.model.BudgetPlan" package="lucicd.travelbudget.model"/>
-    <mapping class="lucicd.travelbudget.model.BudgetPlanItem" package="lucicd.travelbudget.model"/>
-    <mapping class="lucicd.travelbudget.model.Category" package="lucicd.travelbudget.model"/>
-    <mapping class="lucicd.travelbudget.model.Currency" package="lucicd.travelbudget.model"/>
-    <mapping class="lucicd.travelbudget.model.ExchangeRate" package="lucicd.travelbudget.model"/>
-    <mapping class="lucicd.travelbudget.model.Setting" package="lucicd.travelbudget.model"/>
+    <mapping class="lucicd.travelbudget.beans.BudgetPlan" package="lucicd.travelbudget.beans"/>
+    <mapping class="lucicd.travelbudget.beans.BudgetPlanItem" package="lucicd.travelbudget.beans"/>
+    <mapping class="lucicd.travelbudget.beans.Category" package="lucicd.travelbudget.beans"/>
+    <mapping class="lucicd.travelbudget.beans.Currency" package="lucicd.travelbudget.beans"/>
+    <mapping class="lucicd.travelbudget.beans.ExchangeRate" package="lucicd.travelbudget.beans"/>
+    <mapping class="lucicd.travelbudget.beans.Setting" package="lucicd.travelbudget.beans"/>
   </session-factory>
 </hibernate-configuration>

@@ -6,8 +6,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import lucicd.travelbudget.exceptions.AppException;
-import lucicd.travelbudget.model.Currency;
-import lucicd.travelbudget.model.CurrencyDAO;
+import lucicd.travelbudget.beans.Currency;
+import lucicd.travelbudget.dao.CurrencyDAO;
 
 @WebListener
 public class Startup implements ServletContextListener  {

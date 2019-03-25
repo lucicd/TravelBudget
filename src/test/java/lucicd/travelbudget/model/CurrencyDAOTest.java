@@ -1,5 +1,6 @@
 package lucicd.travelbudget.model;
 
+import lucicd.travelbudget.dao.CurrencyDAO;
 import static org.assertj.core.api.Assertions.*;
 import org.junit.Test;
 

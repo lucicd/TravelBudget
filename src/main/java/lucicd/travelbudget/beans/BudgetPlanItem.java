@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package lucicd.travelbudget.model;
+package lucicd.travelbudget.beans;
 
+import lucicd.travelbudget.beans.BudgetPlan;
+import lucicd.travelbudget.beans.Currency;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;

@@ -13,7 +13,7 @@
                 </tr>
             </thead>
             <tbody>
-                <c:forEach var="item" items="${requestScope.data}">
+                <c:forEach var="item" items="${listData}">
                     <tr>
                         <td>${item.getId()}</td>
                         <td>${item.getName()}</td>

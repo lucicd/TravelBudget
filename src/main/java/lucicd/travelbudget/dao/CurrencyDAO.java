@@ -1,5 +1,6 @@
-package lucicd.travelbudget.model;
+package lucicd.travelbudget.dao;
 
+import lucicd.travelbudget.beans.Currency;
 import lucicd.travelbudget.exceptions.AppException;
 import java.util.List;
 import org.hibernate.HibernateException;
@@ -32,7 +33,7 @@ public class CurrencyDAO {
         try {
             session = factory.openSession();
             session.getTransaction().begin();
-            String sql = "from lucicd.travelbudget.model.Currency";
+            String sql = "from lucicd.travelbudget.beans.Currency";
             List<Currency> currencies;
             currencies = (List<Currency>)session.createQuery(sql).getResultList();
             session.getTransaction().commit();
@@ -51,7 +52,7 @@ public class CurrencyDAO {
             session = factory.openSession();
             session.getTransaction().begin();
             String sql;
-            sql = "from lucicd.travelbudget.model.Currency where id=" + Integer.toString(id);
+            sql = "from lucicd.travelbudget.beans.Currency where id=" + Integer.toString(id);
             Currency currency;
             currency = (Currency)session.createQuery(sql).getSingleResult();
             session.getTransaction().commit();
@@ -64,17 +65,47 @@ public class CurrencyDAO {
         }
     }
     
-    public Integer addCurrency(Currency currency) throws AppException
+    public void addCurrency(Currency currency) throws AppException
     {
         try {
             session = factory.openSession();
             session.getTransaction().begin();
             Integer id = (Integer)session.save(currency);
             session.getTransaction().commit();
-            return id;
+            currency.setId(id);
         } catch (HibernateException ex) {
             session.getTransaction().rollback();
             throw new AppException("Failed to add currency. " + ex.getMessage());
+        } finally {
+            session.close();
+        }
+    }
+    
+    public void updateCurrency(Currency currency) throws AppException
+    {
+        try {
+            session = factory.openSession();
+            session.getTransaction().begin();
+            session.update(currency);
+            session.getTransaction().commit();
+        } catch (HibernateException ex) {
+            session.getTransaction().rollback();
+            throw new AppException("Failed to update currency. " + ex.getMessage());
+        } finally {
+            session.close();
+        }
+    }
+    
+    public void deleteCurrency(Currency currency) throws AppException
+    {
+        try {
+            session = factory.openSession();
+            session.getTransaction().begin();
+            session.delete(currency);
+            session.getTransaction().commit();
+        } catch (HibernateException ex) {
+            session.getTransaction().rollback();
+            throw new AppException("Failed to delete currency. " + ex.getMessage());
         } finally {
             session.close();
         }
@@ -86,7 +117,7 @@ public class CurrencyDAO {
             session = factory.openSession();
             session.getTransaction().begin();
             String sql;
-            sql = "select count(t.id) from lucicd.travelbudget.model.Currency t";
+            sql = "select count(t.id) from lucicd.travelbudget.beans.Currency t";
             Long count = (Long)session.createQuery(sql).uniqueResult();
             session.getTransaction().commit();
             return count; 
