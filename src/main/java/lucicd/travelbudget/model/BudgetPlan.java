@@ -37,21 +37,19 @@ public class BudgetPlan implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
+    
     @NotNull
     @Column(name = "travel_date")
     @Temporal(TemporalType.DATE)
     private Date travelDate;
-    @Basic(optional = false)
+    
     @NotNull
-    @Size(min = 1, max = 255)
+    @Size(min = 2, max = 255, message = "Travel destination is required, maximum 255 characters.")
     @Column(name = "travel_destination")
     private String travelDestination;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Basic(optional = false)
+    
     @NotNull
     @Column(name = "available_budget")
     private BigDecimal availableBudget;
