@@ -9,12 +9,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lucicd.travelbudget.exceptions.AppException;
-import lucicd.travelbudget.beans.Currency;
-import lucicd.travelbudget.dao.CurrencyDAO;
-import lucicd.travelbudget.forms.CurrencyForm;
-import lucicd.travelbudget.validators.CurrencyValidator;
+import lucicd.travelbudget.beans.Category;
+import lucicd.travelbudget.dao.CategoryDAO;
+import lucicd.travelbudget.forms.CategoryForm;
+import lucicd.travelbudget.validators.CategoryValidator;
 
-public class CurrencyController implements IController {
+public class CategoryController implements IController {
 
     private final Map<String, IHandler> handlerMap = new HashMap();
 
@@ -24,11 +24,11 @@ public class CurrencyController implements IController {
     {
         try {
             String id = req.getParameter("id");
-            Currency rec = CurrencyDAO.getInstance()
-                    .getCurrency(Integer.parseInt(id));
-            CurrencyForm form = new CurrencyForm();
+            Category rec = CategoryDAO.getInstance()
+                    .getCategory(Integer.parseInt(id));
+            CategoryForm form = new CategoryForm();
             form.setId(rec.getId().toString());
-            form.setName(rec.getName());
+            form.setDescription(rec.getDescription());
             req.setAttribute("formData", rec);
         } catch (NumberFormatException ex) {
             throw new AppException("ID is not a number. " + ex.getMessage());
@@ -37,11 +37,11 @@ public class CurrencyController implements IController {
     
     private void getMany(HttpServletRequest req) throws AppException
     {
-        List<Currency> data = CurrencyDAO.getInstance().getCurrencies();
+        List<Category> data = CategoryDAO.getInstance().getCategories();
         req.setAttribute("listData", data);
     }
 
-    private CurrencyController() {
+    private CategoryController() {
         
         mapAction("list", new IHandler()
         {
@@ -51,7 +51,7 @@ public class CurrencyController implements IController {
             {
                 getMany(req);
                 RequestDispatcher rd = 
-                        req.getRequestDispatcher("/WEB-INF/currencies/index.jsp");
+                        req.getRequestDispatcher("/WEB-INF/categories/index.jsp");
                 try {
                     rd.forward(req, res);
                 } catch (ServletException | IOException ex) {
@@ -66,10 +66,10 @@ public class CurrencyController implements IController {
             public void handleIt(HttpServletRequest req, HttpServletResponse res)
                     throws AppException 
             {
-                CurrencyForm form = new CurrencyForm();
+                CategoryForm form = new CategoryForm();
                 req.setAttribute("formData", form);
                 RequestDispatcher rd = 
-                        req.getRequestDispatcher("/WEB-INF/currencies/form.jsp");
+                        req.getRequestDispatcher("/WEB-INF/categories/form.jsp");
                 try {
                     rd.forward(req, res);
                 } catch (ServletException | IOException ex) {
@@ -86,7 +86,7 @@ public class CurrencyController implements IController {
             {
                 getOne(req);
                 RequestDispatcher rd = 
-                        req.getRequestDispatcher("/WEB-INF/currencies/form.jsp");
+                        req.getRequestDispatcher("/WEB-INF/categories/form.jsp");
                 try {
                     rd.forward(req, res);
                 } catch (ServletException | IOException ex) {
@@ -104,7 +104,7 @@ public class CurrencyController implements IController {
                 getOne(req);
                 req.setAttribute("action", "delete");
                 RequestDispatcher rd = 
-                        req.getRequestDispatcher("/WEB-INF/currencies/details.jsp");
+                        req.getRequestDispatcher("/WEB-INF/categories/details.jsp");
                 try {
                     rd.forward(req, res);
                 } catch (ServletException | IOException ex) {
@@ -122,7 +122,7 @@ public class CurrencyController implements IController {
                 getOne(req);
                 req.setAttribute("action", "details");
                 RequestDispatcher rd = 
-                        req.getRequestDispatcher("/WEB-INF/currencies/details.jsp");
+                        req.getRequestDispatcher("/WEB-INF/categories/details.jsp");
                 try {
                     rd.forward(req, res);
                 } catch (ServletException | IOException ex) {
@@ -137,25 +137,25 @@ public class CurrencyController implements IController {
             public void handleIt(HttpServletRequest req, HttpServletResponse res)
                     throws AppException 
             {
-                CurrencyForm form = new CurrencyForm();
+                CategoryForm form = new CategoryForm();
                 form.setId(req.getParameter("id"));
-                form.setName(req.getParameter("name"));
-                CurrencyValidator validator = new CurrencyValidator();
+                form.setDescription(req.getParameter("description"));
+                CategoryValidator validator = new CategoryValidator();
                 Map<String, String> errors = validator.validate(form);
                 if (errors.isEmpty()) {
-                    CurrencyDAO dao = CurrencyDAO.getInstance();
-                    Currency rec = new Currency();
-                    rec.setName(form.getName());
+                    CategoryDAO dao = CategoryDAO.getInstance();
+                    Category rec = new Category();
+                    rec.setDescription(form.getDescription());
                     String id = form.getId();
                     if (id == null || id.trim().isEmpty()) {
-                        dao.addCurrency(rec);
+                        dao.addCategory(rec);
                     } else {
                         rec.setId(Integer.parseInt(id));
-                        dao.updateCurrency(rec);
+                        dao.updateCategory(rec);
                     }
                     getMany(req);
                     try {
-                        res.sendRedirect("./currencies");
+                        res.sendRedirect("./categories");
                     } catch (IOException ex) {
                         throw new AppException(ex.getMessage());
                     }
@@ -163,7 +163,7 @@ public class CurrencyController implements IController {
                     req.setAttribute("formData", form);
                     req.setAttribute("formErrors", errors);
                     RequestDispatcher rd = 
-                            req.getRequestDispatcher("/WEB-INF/currencies/form.jsp");
+                            req.getRequestDispatcher("/WEB-INF/categories/form.jsp");
                     try {
                         rd.forward(req, res);
                     } catch (ServletException | IOException ex) {
@@ -180,12 +180,12 @@ public class CurrencyController implements IController {
                     throws AppException
             {
                 String id = req.getParameter("id");
-                Currency rec = CurrencyDAO.getInstance()
-                        .getCurrency(Integer.parseInt(id));
-                CurrencyDAO.getInstance().deleteCurrency(rec);
+                Category rec = CategoryDAO.getInstance()
+                        .getCategory(Integer.parseInt(id));
+                CategoryDAO.getInstance().deleteCategory(rec);
                 getMany(req);
                 try {
-                    res.sendRedirect("./currencies");
+                    res.sendRedirect("./categories");
                 } catch (IOException ex) {
                     throw new AppException(ex.getMessage());
                 }
@@ -195,7 +195,7 @@ public class CurrencyController implements IController {
 
     public static IController getInstance() {
         if (controller == null) {
-            controller = new CurrencyController();
+            controller = new CategoryController();
         }
         return controller;
     }

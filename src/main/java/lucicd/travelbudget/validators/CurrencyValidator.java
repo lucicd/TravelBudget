@@ -13,7 +13,7 @@ public class CurrencyValidator {
         if (name == null || name.trim().isEmpty()) {
             errors.put("name", "Name is required.");
         } else if (name.trim().length() > 3) {
-            errors.put("name", "Name lenght must not exceed three characters.");
+            errors.put("name", "Name length must not exceed 3 characters.");
         }
         
         return errors;
