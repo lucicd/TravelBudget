@@ -19,6 +19,27 @@ public class CurrencyController implements IController {
     private final Map<String, IHandler> handlerMap = new HashMap();
 
     private static IController controller = null;
+    
+    private void getOne(ServletRequest req) throws AppException
+    {
+        try {
+            String id = req.getParameter("id");
+            Currency rec = CurrencyDAO.getInstance()
+                    .getCurrency(Integer.parseInt(id));
+            CurrencyForm form = new CurrencyForm();
+            form.setId(rec.getId().toString());
+            form.setName(rec.getName());
+            req.setAttribute("formData", rec);
+        } catch (NumberFormatException ex) {
+            throw new AppException("ID is not a number. " + ex.getMessage());
+        }
+    }
+    
+    private void getMany(ServletRequest req) throws AppException
+    {
+        List<Currency> data = CurrencyDAO.getInstance().getCurrencies();
+        req.setAttribute("listData", data);
+    }
 
     private CurrencyController() {
         mapAction("index", new IHandler() 
@@ -59,7 +80,7 @@ public class CurrencyController implements IController {
             public void handleIt(ServletRequest req, ServletResponse res) 
                     throws AppException
             {
-                controller.handleRequest("#get-many", req, res);
+                getMany(req);
                 controller.handleRequest("index", req, res);
             }
         });
@@ -82,8 +103,48 @@ public class CurrencyController implements IController {
             public void handleIt(ServletRequest req, ServletResponse res) 
                     throws AppException 
             {
-                controller.handleRequest("#get-one", req, res);
+                getOne(req);
                 controller.handleRequest("form", req, res);
+            }
+        });
+        
+        mapAction("details", new IHandler()
+        {
+            @Override
+            public void handleIt(ServletRequest req, ServletResponse res) 
+                    throws AppException
+            {
+                RequestDispatcher rd;
+                rd = req.getRequestDispatcher("/WEB-INF/currencies/details.jsp");
+                try {
+                    rd.forward(req, res);
+                } catch (ServletException | IOException ex) {
+                    throw new AppException(ex.getMessage());
+                }
+            }
+        });
+        
+        mapAction("confirm-delete", new IHandler()
+        {
+            @Override
+            public void handleIt(ServletRequest req, ServletResponse res) 
+                    throws AppException 
+            {
+                getOne(req);
+                req.setAttribute("action", "delete");
+                controller.handleRequest("details", req, res);
+            }
+        });
+        
+        mapAction("show-details", new IHandler()
+        {
+            @Override
+            public void handleIt(ServletRequest req, ServletResponse res) 
+                    throws AppException 
+            {
+                getOne(req);
+                req.setAttribute("action", "details");
+                controller.handleRequest("details", req, res);
             }
         });
 
@@ -119,33 +180,6 @@ public class CurrencyController implements IController {
             
         });
         
-        mapAction("#get-many", new IHandler()
-        {
-            @Override
-            public void handleIt(ServletRequest req, ServletResponse res)
-                    throws AppException
-            {
-                List<Currency> data = CurrencyDAO.getInstance().getCurrencies();
-                req.setAttribute("listData", data);
-            }
-        });
-
-        mapAction("#get-one", new IHandler() 
-        {
-            @Override
-            public void handleIt(ServletRequest req, ServletResponse res)
-                    throws AppException
-            {
-                String id = req.getParameter("id");
-                Currency rec = CurrencyDAO.getInstance()
-                        .getCurrency(Integer.parseInt(id));
-                CurrencyForm form = new CurrencyForm();
-                form.setId(rec.getId().toString());
-                form.setName(rec.getName());
-                req.setAttribute("formData", rec);
-            }
-        });
-        
         mapAction("delete", new IHandler()
         {
             @Override
@@ -158,17 +192,6 @@ public class CurrencyController implements IController {
                 CurrencyDAO.getInstance().deleteCurrency(rec);
                 controller.handleRequest("list", req, res);
             }
-        });
-        
-        mapAction("no-handler", new IHandler()
-        {
-            @Override
-            public void handleIt(ServletRequest req, ServletResponse res) 
-                    throws AppException 
-            {
-                throw new AppException("No handler for given action.");
-            }
-            
         });
     }
 
@@ -187,7 +210,7 @@ public class CurrencyController implements IController {
         IHandler actionHandler
                 = handlerMap.get(action == null ? "list" : action);
         if (actionHandler == null) {
-            actionHandler = handlerMap.get("no-handler");
+            throw new AppException("No handler for action " + action + ".");
         }
         actionHandler.handleIt(req, res);
     }

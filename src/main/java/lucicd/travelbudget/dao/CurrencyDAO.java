@@ -3,6 +3,7 @@ package lucicd.travelbudget.dao;
 import lucicd.travelbudget.beans.Currency;
 import lucicd.travelbudget.exceptions.AppException;
 import java.util.List;
+import javax.persistence.NoResultException;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -57,7 +58,7 @@ public class CurrencyDAO {
             currency = (Currency)session.createQuery(sql).getSingleResult();
             session.getTransaction().commit();
             return currency;
-        } catch (HibernateException ex) {
+        } catch (HibernateException | NoResultException ex) {
             session.getTransaction().rollback();
             throw new AppException("Failed to get currency. " + ex.getMessage());
         } finally {

@@ -3,27 +3,35 @@
 <t:template title="Currencies">
     <jsp:body>
         <h1>Currencies</h1>
-        <a href="./currencies?action=create">Create</a>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="item" items="${listData}">
+        <p>
+            <a class="btn btn-warning" href="./currencies?action=create">Create</a>
+        </p>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
                     <tr>
-                        <td>${item.getId()}</td>
-                        <td>${item.getName()}</td>
-                        <td>
-                            <a href="./currencies?action=edit&id=${item.getId()}">Edit</a>
-                            <a href="./currencies?action=delete&id=${item.getId()}">Delete</a>
-                        </td>
+                        <th class="text-center">Currency Name</th>
+                        <th class="text-center">Actions</th>
                     </tr>
-                </c:forEach>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <c:forEach var="item" items="${listData}">
+                        <tr>
+                            <td class="text-center">
+                                <a href="./currencies?action=show-details&id=${item.getId()}">
+                                    ${item.getName()}
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group-sm">
+                                    <a class="btn btn-primary" href="./currencies?action=edit&id=${item.getId()}">Edit</a>
+                                    <a class="btn btn-danger" href="./currencies?action=confirm-delete&id=${item.getId()}">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </div>
     </jsp:body>
 </t:template>

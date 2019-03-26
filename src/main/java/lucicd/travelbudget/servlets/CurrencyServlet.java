@@ -20,10 +20,6 @@ public class CurrencyServlet extends GenericServlet {
     {
         try {
             String action = req.getParameter("action");
-            if (action != null && !action.trim().isEmpty() && action.charAt(0) == '#') {
-                //Handlers starting with # are not accessible through servlet
-                action = "no-handler";
-            }
             CurrencyController.getInstance().handleRequest(action, req, res);
         } catch (AppException ex) {
             req.setAttribute("error", ex.getMessage());
