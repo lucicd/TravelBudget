@@ -9,7 +9,7 @@
             <input type="hidden" name="id" value="${formData.getId()}">
             <div class="form-row">
                 <div class="col-md-4 mb-3">
-                    <label for="name">Category Description</label>
+                    <label for="description">Category Description</label>
                     <input type="text"
                            class="form-control"
                            id="description" 
