@@ -38,9 +38,12 @@
                         <a class="nav-link" href="currencies">Currencies</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="exchange-rates">Exchange Rates</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="categories">Categories</a>
                     </li>
-                     <li class="nav-item">
+                    <li class="nav-item">
                         <a class="nav-link" href="settings">Settings</a>
                     </li>
                     <li class="nav-item">
