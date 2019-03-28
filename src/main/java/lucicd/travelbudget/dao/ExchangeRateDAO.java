@@ -4,6 +4,7 @@ import lucicd.travelbudget.beans.ExchangeRate;
 import lucicd.travelbudget.exceptions.AppException;
 import java.util.List;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -58,10 +59,10 @@ public class ExchangeRateDAO {
         try {
             session = factory.openSession();
             session.getTransaction().begin();
-            String sql;
-            sql = "from lucicd.travelbudget.beans.ExchangeRate where id=" + Integer.toString(id);
-            ExchangeRate setting;
-            setting = (ExchangeRate) session.createQuery(sql).getSingleResult();
+            String sql = "from lucicd.travelbudget.beans.ExchangeRate where id = :id";
+            Query query = session.createQuery(sql);
+            query.setParameter("id", id);
+            ExchangeRate setting = (ExchangeRate)query.getSingleResult();
             session.getTransaction().commit();
             return setting;
         } catch (HibernateException | NoResultException ex) {

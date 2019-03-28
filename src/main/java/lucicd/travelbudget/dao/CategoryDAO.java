@@ -4,6 +4,7 @@ import lucicd.travelbudget.beans.Category;
 import lucicd.travelbudget.exceptions.AppException;
 import java.util.List;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -52,10 +53,10 @@ public class CategoryDAO {
         try {
             session = factory.openSession();
             session.getTransaction().begin();
-            String sql;
-            sql = "from lucicd.travelbudget.beans.Category where id=" + Integer.toString(id);
-            Category category;
-            category = (Category)session.createQuery(sql).getSingleResult();
+            String sql = "from lucicd.travelbudget.beans.Category where id = :id";
+            Query query = session.createQuery(sql);
+            query.setParameter("id", id);
+            Category category = (Category)query.getSingleResult();
             session.getTransaction().commit();
             return category;
         } catch (HibernateException | NoResultException ex) {
