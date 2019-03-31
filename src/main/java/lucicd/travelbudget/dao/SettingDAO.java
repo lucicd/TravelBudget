@@ -61,7 +61,26 @@ public class SettingDAO {
             return setting;
         } catch (HibernateException | NoResultException ex) {
             session.getTransaction().rollback();
-            throw new AppException("Failed to get setting. " + ex.getMessage());
+            throw new AppException("Failed to get setting by id. " + ex.getMessage());
+        } finally {
+            session.close();
+        }
+    }
+    
+    public Setting getSettingByName(String name) throws AppException
+    {
+        try {
+            session = factory.openSession();
+            session.getTransaction().begin();
+            String sql = "from lucicd.travelbudget.beans.Setting where name = :name";
+            Query query = session.createQuery(sql);
+            query.setParameter("name", name);
+            Setting setting = (Setting)query.getSingleResult();
+            session.getTransaction().commit();
+            return setting;
+        } catch (HibernateException | NoResultException ex) {
+            session.getTransaction().rollback();
+            throw new AppException("Failed to get setting by name. " + ex.getMessage());
         } finally {
             session.close();
         }
