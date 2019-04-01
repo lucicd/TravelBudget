@@ -53,12 +53,14 @@
                 <div class="col-md-4 mb-3">
                     <label for="availableBudget">Available Budget</label>
                     <div class="input-group">
-                        <input type="text"
+                        <input type="number"
                                class="${(empty formErrors.get('availableBudget')) 
                                         ? 'form-control' 
                                         : 'form-control is-invalid'}"
                                id="availableBudget" 
-                               name="availableBudget" 
+                               name="availableBudget"
+                               min="0"
+                               step="0.01"
                                value="${formData.getAvailableBudget()}">
                         <div class="input-group-append">
                             <span class="input-group-text">
@@ -81,7 +83,8 @@
                            class="${(empty formErrors.get('comments')) 
                                     ? 'form-control' 
                                     : 'form-control is-invalid'}"
-                           id="comments" 
+                           id="comments"
+                           rows="5"
                            name="comments" 
                     >${formData.getComments()}</textarea>
                     <c:if test="${!empty formErrors.get('comments')}">

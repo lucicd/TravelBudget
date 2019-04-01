@@ -1,6 +1,7 @@
 package lucicd.travelbudget.forms;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import lucicd.travelbudget.beans.BudgetPlan;
 
 public class BudgetPlanForm {
@@ -26,7 +27,6 @@ public class BudgetPlanForm {
         this.travelDestination = rec.getTravelDestination();
         this.comments = rec.getComments();
         
-
         Integer myId = rec.getCurrencyId();
         if (myId != null) {
             this.currencyId = myId.toString();
@@ -43,6 +43,11 @@ public class BudgetPlanForm {
 
     public String getAvailableBudget() {
         return availableBudget;
+    }
+    
+    public String getFormattedAvailableBudget() {
+        BigDecimal bd = new BigDecimal(this.availableBudget);
+        return new DecimalFormat("#,##0.00").format(bd);
     }
 
     public void setAvailableBudget(String availableBudget) {

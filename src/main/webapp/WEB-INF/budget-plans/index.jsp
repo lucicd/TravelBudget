@@ -1,5 +1,6 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <t:template title="Budget Plans">
     <jsp:body>
         <h1>Budget Plans</h1>
@@ -12,8 +13,7 @@
                     <tr>
                         <th class="text-center">Travel Destination</th>
                         <th class="text-center">Travel Date</th>
-                        <th class="text-center">Available Budget</th>
-                        <th class="text-center">Currency</th>
+                        <th class="text-right">Available Budget</th>
                         <th class="text-center">Actions</th>
                     </tr>
                 </thead>
@@ -26,12 +26,16 @@
                                 </a>
                             </td>
                             <td class="text-center">
-                                ${item[1]}
+                                <fmt:formatDate 
+                                    value="${item[1]}" 
+                                    type="date" 
+                                    pattern="dd-MMM-yyyy"/>
                             </td>
-                            <td class="text-center">
-                                ${item[3]}
-                            </td>
-                            <td class="text-center">
+                            <td class="text-right">
+                                <fmt:formatNumber 
+                                    value="${item[3]}" 
+                                    type="number" 
+                                    pattern="#,##0.00"/>
                                 ${item[4]}
                             </td>
                             <td class="text-center">
