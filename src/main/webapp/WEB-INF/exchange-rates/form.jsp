@@ -42,7 +42,7 @@
                     
             <div class="form-row">
                 <div class="col-md-4 mb-3">
-                    <label for="textValue">Current Exchange Rate</label>
+                    <label for="currentExchangeRate">Current Exchange Rate</label>
                     <div class="input-group">
                         <input type="text"
                                class="${(empty formErrors.get('currentExchangeRate')) ? 'form-control' : 'form-control is-invalid'}"

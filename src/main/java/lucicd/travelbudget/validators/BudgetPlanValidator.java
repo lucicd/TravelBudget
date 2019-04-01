@@ -34,10 +34,10 @@ public class BudgetPlanValidator {
             errors.put("travelDate", "Travel date is required.");
         } else {
             try {
-                DateFormat df = new SimpleDateFormat("dd-MMM-yy", Locale.US);
+                DateFormat df = new SimpleDateFormat("yyyy-mm-dd", Locale.US);
                 Date x = df.parse(travelDate);
             } catch (ParseException ex) {
-                errors.put("travelDate", "Travel date is in the wrong format.");
+                errors.put("travelDate", "Travel date is in the wrong format. " + travelDate);
             }
         }
         

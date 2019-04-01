@@ -48,7 +48,7 @@ public class CurrencyDAO {
         }
     }
     
-    public Currency getCurrency(int id) throws AppException
+    public Currency getCurrency(Integer id) throws AppException
     {
         try {
             session = factory.openSession();
@@ -62,6 +62,25 @@ public class CurrencyDAO {
         } catch (HibernateException | NoResultException ex) {
             session.getTransaction().rollback();
             throw new AppException("Failed to get currency. " + ex.getMessage());
+        } finally {
+            session.close();
+        }
+    }
+    
+    public Currency getCurrencyByName(String name) throws AppException
+    {
+        try {
+            session = factory.openSession();
+            session.getTransaction().begin();
+            String sql = "from lucicd.travelbudget.beans.Currency where name = :name";
+            Query query = session.createQuery(sql);
+            query.setParameter("name", name);
+            Currency currency = (Currency)query.getSingleResult();
+            session.getTransaction().commit();
+            return currency;
+        } catch (HibernateException | NoResultException ex) {
+            session.getTransaction().rollback();
+            throw new AppException("Failed to get currency by name. " + ex.getMessage());
         } finally {
             session.close();
         }

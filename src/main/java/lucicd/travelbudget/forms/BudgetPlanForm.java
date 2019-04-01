@@ -1,8 +1,6 @@
 package lucicd.travelbudget.forms;
 
 import java.math.BigDecimal;
-import java.util.List;
-import lucicd.travelbudget.beans.Currency;
 import lucicd.travelbudget.beans.BudgetPlan;
 
 public class BudgetPlanForm {
@@ -13,17 +11,21 @@ public class BudgetPlanForm {
     private String currencyId;
     private String comments;
     private String currencyName;
-    private List<Currency> currencies;
     
     public BudgetPlanForm() {}
 
     public BudgetPlanForm(BudgetPlan rec) {
         this.id = rec.getId().toString();
 
-        BigDecimal rate = rec.getAvailableBudget();
-        if (rate != null) {
-            this.availableBudget = rate.toString();
+        BigDecimal budget = rec.getAvailableBudget();
+        if (budget != null) {
+            this.availableBudget = budget.toString();
         }
+        
+        this.travelDate = rec.getTravelDate().toString();
+        this.travelDestination = rec.getTravelDestination();
+        this.comments = rec.getComments();
+        
 
         Integer myId = rec.getCurrencyId();
         if (myId != null) {
@@ -61,14 +63,6 @@ public class BudgetPlanForm {
 
     public void setCurrencyName(String currencyName) {
         this.currencyName = currencyName;
-    }
-
-    public List<Currency> getCurrencies() {
-        return currencies;
-    }
-
-    public void setCurrencies(List<Currency> currencies) {
-        this.currencies = currencies;
     }
 
     public String getTravelDestination() {

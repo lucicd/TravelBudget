@@ -34,14 +34,14 @@ public class BudgetPlanDAO {
             session.getTransaction().begin();
             String sql = new StringBuilder()
                     .append("SELECT")
-                    .append(" budget_plan.id id,")
-                    .append(" budget_plan.travel_date travel_date,")
-                    .append(" budget_plan.destination destination,")
-                    .append(" budget_plan.available_budget available_budget,")
+                    .append(" budget_plans.id id,")
+                    .append(" budget_plans.travel_date travel_date,")
+                    .append(" budget_plans.travel_destination travel_destination,")
+                    .append(" budget_plans.available_budget available_budget,")
                     .append(" currencies.name currency")
-                    .append(" FROM budget_plan")
-                    .append(" JOIN currencies ON budget_plan.currency_id = currencies.id")
-                    .append(" ORDER BY travel_date DESC")
+                    .append(" FROM budget_plans")
+                    .append(" JOIN currencies ON budget_plans.currency_id = currencies.id")
+                    .append(" ORDER BY budget_plans.travel_date DESC")
                     .toString();
             NativeQuery query = session.createSQLQuery(sql);
             List<Object[]> budgetPlans = query.list();
