@@ -1,7 +1,11 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<c:set var="title" value="${(empty formData.id) ? 'Create Exchange Rate' : 'Edit Exchange Rate'}"/>
+<c:set var="title" 
+       value="${(empty formData.id) 
+                ? 'Create Exchange Rate' 
+                : 'Edit Exchange Rate'}"
+/>
 <t:template title="${title}">
     <jsp:body>
         <h1>${title}</h1>
@@ -9,13 +13,21 @@
             <input type="hidden" name="id" value="${formData.getId()}">
             <div class="form-row">
                 <div class="col-md-4 mb-3">
-                    <label for="name">Currency</label>
+                    <label for="currencyId">Currency</label>
                     <select id = "currencyId"
                             name = "currencyId"
-                            class="${(empty formErrors.get('currencyId')) ? 'form-control' : 'form-control is-invalid'}">
-                        <c:forEach var="item" items="${currencies}">
+                            class="${(empty formErrors.get('currencyId')) 
+                                     ? 'form-control' 
+                                     : 'form-control is-invalid'}"
+                    >
+                        <option value="">- Select currency - </option>
+                        <c:forEach var="item" items="${formData.getCurrencies()}">
                             <option value="${item.getId()}"
-                                    ${(item.getId() == formData.getCurrencyId()) ? "selected" : ""}>
+                                    ${(item.getId() == formData.getCurrencyId()) 
+                                      ? "selected" : 
+                                      ""}
+                                    label="${item.getName()}"
+                            >
                                 ${item.getName()}
                             </option>
                         </c:forEach>
@@ -40,12 +52,12 @@
                         <span class="input-group-btn">
                             <button id="getRateBtn" class="btn btn-warning">Get Rate</button>
                         </span>
+                        <c:if test="${!empty formErrors.get('currentExchangeRate')}">
+                            <div class="invalid-feedback">
+                                ${formErrors.get('currentExchangeRate')}
+                            </div>
+                        </c:if>
                     </div>
-                    <c:if test="${!empty formErrors.get('currentExchangeRate')}">
-                        <div class="invalid-feedback">
-                            ${formErrors.get('currentExchangeRate')}
-                        </div>
-                    </c:if>
                 </div>
             </div>
                     

@@ -1,6 +1,8 @@
 package lucicd.travelbudget.forms;
 
 import java.math.BigDecimal;
+import java.util.List;
+import lucicd.travelbudget.beans.Currency;
 import lucicd.travelbudget.beans.ExchangeRate;
 
 public class ExchangeRateForm {
@@ -8,6 +10,7 @@ public class ExchangeRateForm {
     private String currentExchangeRate;
     private String currencyId;
     private String currencyName;
+    private List<Currency> currencies;
     
     public ExchangeRateForm() {}
 
@@ -55,5 +58,13 @@ public class ExchangeRateForm {
 
     public void setCurrencyName(String currencyName) {
         this.currencyName = currencyName;
+    }
+
+    public List<Currency> getCurrencies() {
+        return currencies;
+    }
+
+    public void setCurrencies(List<Currency> currencies) {
+        this.currencies = currencies;
     }
 }

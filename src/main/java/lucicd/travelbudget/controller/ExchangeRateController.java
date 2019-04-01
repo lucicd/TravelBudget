@@ -55,12 +55,6 @@ public class ExchangeRateController implements IController {
         req.setAttribute("listData", data);
     }
     
-    private void getCurrencies(HttpServletRequest req) throws AppException
-    {
-        List<Currency> data = CurrencyDAO.getInstance().getCurrencies();
-        req.setAttribute("currencies", data);
-    }
-    
     private String getCurrencyName(Integer id) 
             throws AppException
     {
@@ -145,8 +139,8 @@ public class ExchangeRateController implements IController {
             public void handleIt(HttpServletRequest req, HttpServletResponse res)
                     throws AppException 
             {
-                getCurrencies(req);
                 ExchangeRateForm form = new ExchangeRateForm();
+                form.setCurrencies(CurrencyDAO.getInstance().getCurrencies());
                 req.setAttribute("formData", form);
                 RequestDispatcher rd = 
                         req.getRequestDispatcher("/WEB-INF/exchange-rates/form.jsp");
@@ -165,8 +159,9 @@ public class ExchangeRateController implements IController {
                     throws AppException 
             {
                 ExchangeRate rec = getOne(req);
-                req.setAttribute("formData", new ExchangeRateForm(rec));
-                getCurrencies(req);
+                ExchangeRateForm form = new ExchangeRateForm(rec);
+                form.setCurrencies(CurrencyDAO.getInstance().getCurrencies());
+                req.setAttribute("formData", form);
                 RequestDispatcher rd = 
                         req.getRequestDispatcher("/WEB-INF/exchange-rates/form.jsp");
                 try {
@@ -259,6 +254,7 @@ public class ExchangeRateController implements IController {
                         throw new AppException(ex.getMessage());
                     }
                 } else {
+                    form.setCurrencies(CurrencyDAO.getInstance().getCurrencies());
                     req.setAttribute("formData", form);
                     req.setAttribute("formErrors", errors);
                     RequestDispatcher rd = 
@@ -299,34 +295,36 @@ public class ExchangeRateController implements IController {
             {
                 String currencyId = req.getParameter("currencyId");
                 String currencyName;
-                if (currencyId != null) {
+                if (currencyId != null && currencyId.trim().length() > 0) {
                     currencyName = getCurrencyName(Integer.parseInt(currencyId));
                 } else {
                     currencyName = "na";
                 }
                 String currencies = currencyName + "_" + getReferenceCurrency();
-                
-                //System.out.println(currencies);
                 String json = getExchangeRateFromAPI(currencies);
+                ExchangeRateForm form = new ExchangeRateForm();
+                form.setId(req.getParameter("id"));
+                form.setCurrencyId(currencyId);
+                form.setCurrentExchangeRate(req.getParameter("currentExchangeRate"));
+                form.setCurrencies(CurrencyDAO.getInstance().getCurrencies());
                 if (json.length() > 0 && !"{}".equals(json))
                 {
                     try {
                         JSONParser parser = new JSONParser();
                         JSONObject rate = (JSONObject)parser.parse(json);
-                        ExchangeRateForm form = new ExchangeRateForm();
-                        form.setId(req.getParameter("id"));
-                        //System.out.println(rate.get(currencies));
                         String currentRate = rate.get(currencies).toString();
                         form.setCurrentExchangeRate(currentRate);
-                        form.setCurrencyId(currencyId);
-                        req.setAttribute("formData", form);
-                        getCurrencies(req);
-                        RequestDispatcher rd = 
-                            req.getRequestDispatcher("/WEB-INF/exchange-rates/form.jsp");
-                        rd.forward(req, res);
-                    } catch (ParseException | ServletException | IOException ex) {
+                    } catch (ParseException ex) {
                         throw new AppException(ex.getMessage());
                     }
+                }
+                try {
+                    req.setAttribute("formData", form);
+                    RequestDispatcher rd = 
+                        req.getRequestDispatcher("/WEB-INF/exchange-rates/form.jsp");
+                    rd.forward(req, res);
+                } catch (ServletException | IOException ex) {
+                    throw new AppException(ex.getMessage());
                 }
             }    
         });
