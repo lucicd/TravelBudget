@@ -42,7 +42,9 @@ public class BudgetPlan implements Serializable {
         this.id = id;
     }
 
-    public BudgetPlan(Integer id, Date travelDate, String travelDestination, BigDecimal availableBudget) {
+    public BudgetPlan(Integer id, Date travelDate, 
+            String travelDestination, BigDecimal availableBudget) 
+    {
         this.id = id;
         this.travelDate = travelDate;
         this.travelDestination = travelDestination;
