@@ -1,47 +1,62 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<t:template title="Budget Plans">
+<t:template title="Budget Plan Items">
     <jsp:body>
-        <h1>Budget Plans</h1>
+        <h1>Budget Plan Items</h1>
         <p>
-            <a class="btn btn-warning" href="./budget-plans?action=create">Create</a>
+            <a class="btn btn-warning"
+               href="./budget-plan-items?action=create&budgetPlanId=${budgetPlanId}">Create</a>
         </p>
         <div class="table-responsive">
             <table class="table table-bordered table-striped table-hover">
                 <thead>
                     <tr>
-                        <th class="text-center">Travel Destination</th>
-                        <th class="text-center">Travel Date</th>
-                        <th class="text-right">Available Budget</th>
+                        <th class="text-left">Description</th>
+                        <th class="text-center">Start Date</th>
+                        <th class="text-center">Completion Date</th>
+                        <th class="text-center">Category</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-right">Cost</th>
                         <th class="text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <c:forEach var="item" items="${listData}">
                         <tr>
-                            <td class="text-center">
-                                <a href="./budget-plans?action=show-details&id=${item[0]}">
+                            <td class="text-left">
+                                <a href="./budget-plan-items?action=show-details&id=${item[0]}">
                                     ${item[2]}
                                 </a>
                             </td>
                             <td class="text-center">
                                 <fmt:formatDate 
-                                    value="${item[1]}" 
+                                    value="${item[4]}" 
                                     type="date" 
                                     pattern="dd-MMM-yyyy"/>
                             </td>
+                            <td class="text-center">
+                                <fmt:formatDate 
+                                    value="${item[5]}" 
+                                    type="date" 
+                                    pattern="dd-MMM-yyyy"/>
+                            </td>
+                            <td class="text-left">
+                                ${item[14]}
+                            </td>
+                            <td class="text-left">
+                                ${item[7]}
+                            </td>
                             <td class="text-right">
                                 <fmt:formatNumber 
-                                    value="${item[3]}" 
+                                    value="${item[10]}" 
                                     type="number" 
                                     pattern="#,##0.00"/>
-                                ${item[4]}
                             </td>
                             <td class="text-center">
                                 <div class="btn-group-sm">
-                                    <a class="btn btn-primary" href="./budget-plans?action=edit&id=${item[0]}">Edit</a>
-                                    <a class="btn btn-danger" href="./budget-plans?action=confirm-delete&id=${item[0]}">Delete</a>
+                                    <a class="btn btn-primary" href="./budget-plan-items?action=edit&id=${item[0]}">Edit</a>
+                                    <a class="btn btn-danger" href="./budget-plan-items?action=confirm-delete&id=${item[0]}">Delete</a>
                                 </div>
                             </td>
                         </tr>

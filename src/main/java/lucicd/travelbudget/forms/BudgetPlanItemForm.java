@@ -1,6 +1,7 @@
 package lucicd.travelbudget.forms;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import lucicd.travelbudget.beans.Currency;
@@ -24,6 +25,7 @@ public class BudgetPlanItemForm {
     private String category;
     private List<Currency> currencies;
     private List<Category> categories;
+    private List<String> statuses;
     private BudgetPlanForm budgetPlan;
     
     public BudgetPlanItemForm() {}
@@ -223,6 +225,13 @@ public class BudgetPlanItemForm {
     public void setBudgetPlan(BudgetPlanForm budgetPlan) {
         this.budgetPlan = budgetPlan;
     }
-    
-    
+
+    public List<String> getStatuses() {
+        this.statuses = new ArrayList<>();
+        statuses.add("Draft");
+        statuses.add("Confirmed");
+        statuses.add("Completed");
+        statuses.add("Cancelled");
+        return statuses;
+    }
 }

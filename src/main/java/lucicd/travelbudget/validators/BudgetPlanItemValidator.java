@@ -70,12 +70,16 @@ public class BudgetPlanItemValidator {
         }
         
         String completionDate = form.getCompletionDate();
-        if (completionDate != null && completionDate.trim().length() > 0) {
+        if (completionDate == null || completionDate.trim().length() == 0) {
+            errors.put("completionDate", "Completion date is required.");
+        } else {
             try {
                 DateFormat df = new SimpleDateFormat("yyyy-mm-dd", Locale.US);
                 Date x = df.parse(completionDate);
             } catch (ParseException ex) {
-                errors.put("completionDate", "Completion date is in the wrong format. " + completionDate);
+                errors.put("completionDate", 
+                        "Completion date is in the wrong format. " 
+                        + completionDate);
             }
         }
         

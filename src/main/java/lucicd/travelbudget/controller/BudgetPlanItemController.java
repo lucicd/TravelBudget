@@ -109,7 +109,9 @@ public class BudgetPlanItemController implements IController {
             {
                 getMany(req);
                 RequestDispatcher rd = req.getRequestDispatcher(
-                        "/WEB-INF/budget-plan-items/index.jsp");
+                        "/WEB-INF/budget-plan-items/index.jsp?budgetPlanId="
+                        + req.getParameter("budgetPlanId"));
+                req.setAttribute("budgetPlanId", req.getParameter("budgetPlanId"));
                 try {
                     rd.forward(req, res);
                 } catch (ServletException | IOException ex) {
@@ -275,7 +277,8 @@ public class BudgetPlanItemController implements IController {
                     }
                     getMany(req);
                     try {
-                        res.sendRedirect("./budget-plan-items");
+                        res.sendRedirect("./budget-plan-items?budgetPlanId="
+                            + form.getBudgetPlanId());
                     } catch (IOException ex) {
                         throw new AppException(ex.getMessage());
                     }
@@ -308,7 +311,8 @@ public class BudgetPlanItemController implements IController {
                 BudgetPlanItemDAO.getInstance().deleteBudgetPlanItem(rec);
                 getMany(req);
                 try {
-                    res.sendRedirect("./budget-plan-items");
+                    res.sendRedirect("./budget-plan-items?budgetPlanId=" 
+                            + rec.getBudgetPlanId().toString());
                 } catch (IOException ex) {
                     throw new AppException(ex.getMessage());
                 }

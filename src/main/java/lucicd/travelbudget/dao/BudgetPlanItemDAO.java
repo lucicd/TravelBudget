@@ -35,28 +35,28 @@ public class BudgetPlanItemDAO {
             session = factory.openSession();
             session.getTransaction().begin();
             String sql = new StringBuilder()
-                    .append("SELECT")
-                    .append(" budget_plan_items.id id")
-                    .append(", budget_plan_items.budget_plan_id budget_plan_id")
-                    .append(", budget_plan_items.item_description item_description")
-                    .append(", budget_plan_items.url url")
-                    .append(", budget_plan_items.start_date start_date")
-                    .append(", budget_plan_items.completion_date completion_date")
-                    .append(", budget_plan_items.cost_in_currency cost_in_currency")
-                    .append(", budget_plan_items.status status")
-                    .append(", budget_plan_items.comments comments")
-                    .append(", budget_plan_items.exchange_rate exchange_rate")
-                    .append(", budget_plan_items.cost_in_currency * budget_plan_items.exchange_rate cost")
-                    .append(", budget_plan_items.currency_id currency_id")
-                    .append(", currencies.name currency")
-                    .append(", budget_plan_items.category_id category_id")
-                    .append(", categories.description category")
-                    .append(" FROM budget_plan_items")
-                    .append(" JOIN currencies ON budget_plan_items.currency_id = currencies.id")
-                    .append(" JOIN categories ON budget_plan_items.category_id = categories.id")
-                    .append(" WHERE budget_plan_items.budget_plan_id = :budgetPlanId")
-                    .append(" ORDER BY budget_plan_items.start_date DESC")
-                    .toString();
+                .append("SELECT")
+                .append(" budget_plan_items.id id")
+                .append(", budget_plan_items.budget_plan_id budget_plan_id")
+                .append(", budget_plan_items.item_description item_description")
+                .append(", budget_plan_items.url url")
+                .append(", budget_plan_items.start_date start_date")
+                .append(", budget_plan_items.completion_date completion_date")
+                .append(", budget_plan_items.cost_in_currency cost_in_currency")
+                .append(", budget_plan_items.status status")
+                .append(", budget_plan_items.comments comments")
+                .append(", budget_plan_items.exchange_rate exchange_rate")
+                .append(", budget_plan_items.cost_in_currency * budget_plan_items.exchange_rate cost")
+                .append(", budget_plan_items.currency_id currency_id")
+                .append(", currencies.name currency")
+                .append(", budget_plan_items.category_id category_id")
+                .append(", categories.description category")
+                .append(" FROM budget_plan_items")
+                .append(" JOIN currencies ON budget_plan_items.currency_id = currencies.id")
+                .append(" JOIN categories ON budget_plan_items.category_id = categories.id")
+                .append(" WHERE budget_plan_items.budget_plan_id = :budgetPlanId")
+                .append(" ORDER BY budget_plan_items.start_date DESC")
+                .toString();
             NativeQuery query = session.createSQLQuery(sql);
             query.setParameter("budgetPlanId", budgetPlanId);
             List<Object[]> budgetPlanItems = query.list();
@@ -97,7 +97,9 @@ public class BudgetPlanItemDAO {
             rec.setId(id);
         } catch (HibernateException ex) {
             session.getTransaction().rollback();
-            throw new AppException("Failed to add budget plan item. " + ex.getMessage());
+            ex.printStackTrace();
+            throw new AppException("Failed to add budget plan item." 
+                    + " " + ex.getMessage());
         } finally {
             session.close();
         }
