@@ -40,7 +40,6 @@
                             </td>
                             <td class="text-center">
                                 <div class="btn-group-sm">
-                                    <a class="btn btn-primary" href="./budget-plan-items?action=list&budgetPlanId=${item[0]}">Items</a>
                                     <a class="btn btn-primary" href="./budget-plans?action=edit&id=${item[0]}">Edit</a>
                                     <a class="btn btn-danger" href="./budget-plans?action=confirm-delete&id=${item[0]}">Delete</a>
                                 </div>

@@ -28,7 +28,9 @@ public class BudgetPlanItemDAO {
         return singleInstance;
     }
 
-    public List<Object[]> getBudgetPlanItems() throws AppException {
+    public List<Object[]> getBudgetPlanItems(Integer budgetPlanId)
+            throws AppException 
+    {
         try {
             session = factory.openSession();
             session.getTransaction().begin();
@@ -46,16 +48,17 @@ public class BudgetPlanItemDAO {
                     .append(", budget_plan_items.exchange_rate exchange_rate")
                     .append(", budget_plan_items.cost_in_currency * budget_plan_items.exchange_rate cost")
                     .append(", budget_plan_items.currency_id currency_id")
-                    .append(", budget_plan_items.status status")
                     .append(", currencies.name currency")
                     .append(", budget_plan_items.category_id category_id")
                     .append(", categories.description category")
                     .append(" FROM budget_plan_items")
                     .append(" JOIN currencies ON budget_plan_items.currency_id = currencies.id")
                     .append(" JOIN categories ON budget_plan_items.category_id = categories.id")
+                    .append(" WHERE budget_plan_items.budget_plan_id = :budgetPlanId")
                     .append(" ORDER BY budget_plan_items.start_date DESC")
                     .toString();
             NativeQuery query = session.createSQLQuery(sql);
+            query.setParameter("budgetPlanId", budgetPlanId);
             List<Object[]> budgetPlanItems = query.list();
             session.getTransaction().commit();
             return budgetPlanItems;
