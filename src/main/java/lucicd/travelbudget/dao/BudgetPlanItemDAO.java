@@ -55,7 +55,7 @@ public class BudgetPlanItemDAO {
                 .append(" JOIN currencies ON budget_plan_items.currency_id = currencies.id")
                 .append(" JOIN categories ON budget_plan_items.category_id = categories.id")
                 .append(" WHERE budget_plan_items.budget_plan_id = :budgetPlanId")
-                .append(" ORDER BY budget_plan_items.start_date DESC")
+                .append(" ORDER BY budget_plan_items.start_date, budget_plan_items.id")
                 .toString();
             NativeQuery query = session.createSQLQuery(sql);
             query.setParameter("budgetPlanId", budgetPlanId);

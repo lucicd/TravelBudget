@@ -68,7 +68,7 @@ public class BudgetPlanItemForm {
             this.categoryId = categoryIdTmp.toString();
         }
         
-        Integer currencyIdTmp = rec.getCategoryId();
+        Integer currencyIdTmp = rec.getCurrencyId();
         if (currencyIdTmp != null) {
             this.currencyId = currencyIdTmp.toString();
         }

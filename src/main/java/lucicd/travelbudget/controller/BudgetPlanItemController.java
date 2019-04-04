@@ -128,6 +128,8 @@ public class BudgetPlanItemController implements IController {
             {
                 BudgetPlanItemForm form = new BudgetPlanItemForm();
                 form.setBudgetPlanId(req.getParameter("budgetPlanId"));
+                form.setCurrencies(CurrencyDAO.getInstance().getCurrencies());
+                form.setCategories(CategoryDAO.getInstance().getCategories());
                 req.setAttribute("formData", form);
                 RequestDispatcher rd = 
                         req.getRequestDispatcher("/WEB-INF/budget-plan-items/form.jsp");
@@ -147,7 +149,7 @@ public class BudgetPlanItemController implements IController {
             {
                 BudgetPlanItem rec = getOne(req);
                 BudgetPlanItemForm form = new BudgetPlanItemForm(rec);
-                form.setBudgetPlanId(req.getParameter("budgetPlanId"));
+                form.setBudgetPlanId(rec.getBudgetPlanId().toString());
                 form.setCurrencies(CurrencyDAO.getInstance().getCurrencies());
                 form.setCategories(CategoryDAO.getInstance().getCategories());
                 req.setAttribute("formData", form);

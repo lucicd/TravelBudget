@@ -72,6 +72,30 @@ public class ExchangeRateDAO {
             session.close();
         }
     }
+    
+    public ExchangeRate getExchangeRateByCurrency(Integer currencyId) 
+            throws AppException 
+    {
+        try {
+            session = factory.openSession();
+            session.getTransaction().begin();
+            String sql = "from lucicd.travelbudget.beans.ExchangeRate"
+                    + " where currency_id = :currencyId";
+            Query query = session.createQuery(sql);
+            query.setParameter("currencyId", currencyId);
+            ExchangeRate setting = (ExchangeRate)query.getSingleResult();
+            session.getTransaction().commit();
+            return setting;
+        } catch (HibernateException | NoResultException ex) {
+            session.getTransaction().rollback();
+            throw new AppException("Failed to get exchange"
+                    + " rate for currencyId = "
+                    + currencyId.toString()
+                    + ". " + ex.getMessage());
+        } finally {
+            session.close();
+        }
+    }
 
     public void addExchangeRate(ExchangeRate setting) throws AppException {
         try {

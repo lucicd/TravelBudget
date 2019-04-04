@@ -238,7 +238,60 @@
             </div>
             
             <button type="submit" class="btn btn-primary">Submit</button>
-            <a class="btn btn-primary" href="budget-plan-items">Back to list</a>
+            <a class="btn btn-primary" href="budget-plan-items?budgetPlanId=${formData.getBudgetPlanId()}">Back to list</a>
         </form>
+        <script>
+            window.onload = function()
+            {
+                function getJSON(path, success, error)
+                {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function()
+                    {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status === 200) {
+                            if (success)
+                                try {
+                                    var data = JSON.parse(xhr.responseText);
+                                    success(data);
+                                } catch (err) {
+                                    error("No exchange rate for this currency.");
+                                }
+                            } else {
+                                if (error)
+                                    error(xhr);
+                            }
+                        }
+                    }
+                    xhr.open("GET", path, true);
+                    xhr.send();
+                }
+                
+                var currencyIdSelect = document.getElementById('currencyId');
+                currencyIdSelect.onchange = function()
+                {
+                    var currencyId = currencyIdSelect.options[
+                        currencyIdSelect.selectedIndex
+                    ].value;
+                    
+                    if (!currencyId) return;
+                    
+                    var url = 'exchange-rates?action=getRate&currencyId='
+                            + currencyId;
+                    
+                    getJSON(url,
+                        function(data) 
+                        {
+                            var exchangeRateText = 
+                                    document.getElementById('exchangeRate');
+                            exchangeRateText.value = data.currentExchangeRate;
+                        },
+                        function(error)
+                        {
+                            alert(error.toString());
+                        });
+                };
+            };
+        </script>
     </jsp:body>
 </t:template>

@@ -3,6 +3,7 @@ package lucicd.travelbudget.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
@@ -45,6 +46,20 @@ public class ExchangeRateController implements IController {
             rec = ExchangeRateDAO.getInstance().getExchangeRate(Integer.parseInt(id));
         } catch (NumberFormatException ex) {
             throw new AppException("ID is not a number. " + ex.getMessage());
+        }
+        return rec;
+    }
+    
+    private ExchangeRate getExchangeRateByCurrencyId(Integer currencyId) 
+            throws AppException
+    {
+        ExchangeRate rec;
+        try {
+            rec = ExchangeRateDAO.getInstance()
+                    .getExchangeRateByCurrency(currencyId);
+        } catch (NumberFormatException ex) {
+            throw new AppException("currencyId is not a number. " 
+                    + ex.getMessage());
         }
         return rec;
     }
@@ -172,7 +187,7 @@ public class ExchangeRateController implements IController {
             }
         });
         
-        mapAction("confirm-delete", new IHandler()
+        mapAction("edit", new IHandler()
         {
             @Override
             public void handleIt(HttpServletRequest req, HttpServletResponse res) 
@@ -180,15 +195,39 @@ public class ExchangeRateController implements IController {
             {
                 ExchangeRate rec = getOne(req);
                 ExchangeRateForm form = new ExchangeRateForm(rec);
-                form.setCurrencyName(getCurrencyName(rec.getCurrencyId()));
+                form.setCurrencies(CurrencyDAO.getInstance().getCurrencies());
                 req.setAttribute("formData", form);
-                req.setAttribute("action", "delete");
                 RequestDispatcher rd = 
-                        req.getRequestDispatcher("/WEB-INF/exchange-rates/details.jsp");
+                        req.getRequestDispatcher("/WEB-INF/exchange-rates/form.jsp");
                 try {
                     rd.forward(req, res);
                 } catch (ServletException | IOException ex) {
                     throw new AppException(ex.getMessage());
+                }
+            }
+        });
+        
+        mapAction("getRate", new IHandler()
+        {
+            @Override
+            public void handleIt(HttpServletRequest req, HttpServletResponse res) 
+                    throws AppException 
+            {
+                Integer currencyId = 
+                        Integer.parseInt(req.getParameter("currencyId"));
+                ExchangeRate rec = getExchangeRateByCurrencyId(currencyId);
+                try (PrintWriter out = res.getWriter()) 
+                {
+                    res.setContentType( "application/json;charset=UTF-8");
+                    JSONObject obj = new JSONObject();
+                    obj.put("currentExchangeRate", 
+                            rec.getCurrentExchangeRate().toString());
+                    out.print(obj.toJSONString());
+                } 
+                catch (Exception ex) 
+                {
+                    throw new AppException("Can't get exchange rate as JSON. "
+                        + ex.getMessage());
                 }
             }
         });

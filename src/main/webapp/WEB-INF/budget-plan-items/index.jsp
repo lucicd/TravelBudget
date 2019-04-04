@@ -44,7 +44,7 @@
                             <td class="text-left">
                                 ${item[14]}
                             </td>
-                            <td class="text-left">
+                            <td class="text-center">
                                 ${item[7]}
                             </td>
                             <td class="text-right">
