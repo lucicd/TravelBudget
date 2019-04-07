@@ -6,7 +6,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.servlet.RequestDispatcher;
@@ -19,12 +18,15 @@ import lucicd.travelbudget.beans.BudgetPlan;
 import lucicd.travelbudget.beans.Setting;
 import lucicd.travelbudget.dao.CurrencyDAO;
 import lucicd.travelbudget.dao.BudgetPlanDAO;
+import lucicd.travelbudget.dao.PaginatedList;
 import lucicd.travelbudget.dao.SettingDAO;
 import lucicd.travelbudget.forms.BudgetPlanForm;
 import lucicd.travelbudget.validators.BudgetPlanValidator;
 
 public class BudgetPlanController implements IController {
 
+    private final int PAGE_SIZE = 5;
+    
     private final Map<String, IHandler> handlerMap = new HashMap();
 
     private static IController controller = null;
@@ -44,7 +46,54 @@ public class BudgetPlanController implements IController {
     
     private void getMany(HttpServletRequest req) throws AppException
     {
-        List<Object[]> data = BudgetPlanDAO.getInstance().getBudgetPlans();
+        String pageNumberStr = req.getParameter("pageNumber");
+        int pageNumber = 1;
+        if (pageNumberStr != null && pageNumberStr.length() > 0)
+        {
+            try {
+                pageNumber = Integer.parseInt(pageNumberStr);
+            } catch (NumberFormatException ex) {
+                throw new AppException("pageNumber is not a number. " 
+                        + ex.getMessage());
+            }
+        }
+        
+        String sortOrder = req.getParameter("sortOrder");
+        req.setAttribute("currentFilter", sortOrder);
+        if (sortOrder == null || sortOrder.isEmpty()) {
+            sortOrder = "date_desc";
+        }
+        
+        String destinationSortOrder = 
+                "destination".equals(sortOrder) 
+                ? "destination_desc" 
+                : "destination";
+        req.setAttribute("destinationSortOrder", destinationSortOrder);
+        
+        String dateSortOrder = 
+                "date".equals(sortOrder) 
+                ? "date_desc" 
+                : "date";
+        req.setAttribute("dateSortOrder", dateSortOrder);
+        
+        String availableBudgetSortOrder = 
+                "availableBudget".equals(sortOrder) 
+                ? "availableBudget_desc" 
+                : "availableBudget";
+        req.setAttribute("availableBudgetSortOrder", availableBudgetSortOrder);
+        
+        String searchString = req.getParameter("searchString");
+        String currentFilter = req.getParameter("currentFilter");
+        if (searchString != null)
+        {
+            pageNumber = 1;
+        } else {
+            searchString = currentFilter;
+        }
+        req.setAttribute("currentFilter", searchString);
+        
+        PaginatedList data = BudgetPlanDAO.getInstance()
+                .getBudgetPlans(PAGE_SIZE, pageNumber, searchString, sortOrder);
         req.setAttribute("listData", data);
     }
     
@@ -197,7 +246,7 @@ public class BudgetPlanController implements IController {
                     BudgetPlanDAO dao = BudgetPlanDAO.getInstance();
                                         
                     String travelDate = form.getTravelDate();
-                    DateFormat df = new SimpleDateFormat("yyyy-mm-dd", Locale.US);
+                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                     try {
                         rec.setTravelDate(df.parse(travelDate));
                     } catch (ParseException ex) {

@@ -7,18 +7,41 @@
         <p>
             <a class="btn btn-warning" href="./budget-plans?action=create">Create</a>
         </p>
+        <form action="./budget-plans" method="get">
+            <div class="form-group">
+                <span class="align-middle">
+                    Destination: <input type="text" name="searchString" value="${currentFilter}" />
+                    <input type="submit" value="Search" class="btn btn-sm btn-primary" />
+                    <a class="btn btn-sm btn-primary" href="./budget-plans">
+                        Back to Full List
+                    </a>
+                </span>
+            </div>
+        </form>
         <div class="table-responsive">
             <table class="table table-bordered table-striped table-hover">
                 <thead>
                     <tr>
-                        <th class="text-center">Travel Destination</th>
-                        <th class="text-center">Travel Date</th>
-                        <th class="text-right">Available Budget</th>
+                        <th class="text-center">
+                            <a href="./budget-plans?sortOrder=${destinationSortOrder}&currentFilter=${currentFilter}">
+                            Travel Destination
+                            </a>
+                        </th>
+                        <th class="text-center">
+                            <a href="./budget-plans?sortOrder=${dateSortOrder}&currentFilter=${currentFilter}">
+                                Travel Date
+                            </a>
+                        </th>
+                        <th class="text-right">
+                            <a href="./budget-plans?sortOrder=${availableBudgetSortOrder}&currentFilter=${currentFilter}">
+                                Available Budget
+                            </a>
+                        </th>
                         <th class="text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach var="item" items="${listData}">
+                    <c:forEach var="item" items="${listData.list}">
                         <tr>
                             <td class="text-center">
                                 <a href="./budget-plans?action=show-details&id=${item[0]}">
@@ -50,5 +73,13 @@
                 </tbody>
             </table>
         </div>
+        <a class="btn btn-primary btn-sm ${(listData.hasPrevPage() ? "" : "disabled")}" 
+            href="./budget-plans?pageNumber=${listData.getCurrentPage() - 1}&currentFilter=${currentFilter}&sortOrder=${currentSort}">
+            Previous
+        </a>
+        <a class="btn btn-primary btn-sm ${(listData.hasNextPage() ? "" : "disabled")}" 
+            href="./budget-plans?pageNumber=${listData.getCurrentPage() + 1}&currentFilter=${currentFilter}&sortOrder=${currentSort}">
+            Next
+        </a>
     </jsp:body>
 </t:template>

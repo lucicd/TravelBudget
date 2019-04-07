@@ -1,5 +1,6 @@
 package lucicd.travelbudget.dao;
 
+import java.math.BigInteger;
 import lucicd.travelbudget.beans.BudgetPlan;
 import lucicd.travelbudget.exceptions.AppException;
 import java.util.List;
@@ -28,12 +29,15 @@ public class BudgetPlanDAO {
         return singleInstance;
     }
 
-    public List<Object[]> getBudgetPlans() throws AppException {
+    public PaginatedList getBudgetPlans(int pageSize, int pageNumber, 
+            String search, String sortOrder) 
+            throws AppException
+    {
         try {
             session = factory.openSession();
             session.getTransaction().begin();
-            String sql = new StringBuilder()
-                    .append("SELECT")
+            StringBuilder sqlBuilder = new StringBuilder()
+                    .append("SELECT SQL_CALC_FOUND_ROWS")
                     .append(" budget_plans.id id,")
                     .append(" budget_plans.travel_date travel_date,")
                     .append(" budget_plans.travel_destination travel_destination,")
@@ -41,12 +45,45 @@ public class BudgetPlanDAO {
                     .append(" currencies.name currency")
                     .append(" FROM budget_plans")
                     .append(" JOIN currencies ON budget_plans.currency_id = currencies.id")
-                    .append(" ORDER BY budget_plans.travel_date DESC")
-                    .toString();
+                    .append(" WHERE budget_plans.travel_destination LIKE :search")
+                    .append(" ORDER BY ");
+            switch (sortOrder)
+            {
+                case "destination":
+                    sqlBuilder.append("travel_destination");
+                    break;
+                case "destination_desc":
+                    sqlBuilder.append("travel_destination DESC");
+                    break;
+                case "date":
+                    sqlBuilder.append("travel_date");
+                    break;
+                case "availableBudget":
+                    sqlBuilder.append("available_budget");
+                    break;
+                case "availableBudget_desc":
+                    sqlBuilder.append("available_budget DESC");
+                    break;
+                default:
+                    sqlBuilder.append("travel_date DESC");
+            }
+            sqlBuilder.append(" LIMIT :limit OFFSET :offset");
+            String sql = sqlBuilder.toString();
             NativeQuery query = session.createSQLQuery(sql);
-            List<Object[]> budgetPlans = query.list();
+            query.setParameter("limit", pageSize);
+            query.setParameter("offset", (pageNumber - 1) * pageSize);
+            if (search == null || search.trim().length() == 0) {
+                query.setParameter("search", "%");
+            } else {
+                query.setParameter("search", "%" + search.trim() + "%");
+            }
+            PaginatedList paginatedList = new PaginatedList(pageSize);
+            paginatedList.setList(query.list());
+            query = session.createSQLQuery("SELECT FOUND_ROWS()");
+            paginatedList.setNumRows((BigInteger)query.getSingleResult());
+            paginatedList.setCurrentPage(pageNumber);
             session.getTransaction().commit();
-            return budgetPlans;
+            return paginatedList;
         } catch (HibernateException ex) {
             session.getTransaction().rollback();
             throw new AppException("Failed to get budget plans. " + ex.getMessage());

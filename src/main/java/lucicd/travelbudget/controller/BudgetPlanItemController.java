@@ -237,7 +237,7 @@ public class BudgetPlanItemController implements IController {
                     rec.setUrl(form.getUrl());
                     
                     String startDate = form.getStartDate();
-                    DateFormat df = new SimpleDateFormat("yyyy-mm-dd", Locale.US);
+                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                     try {
                         rec.setStartDate(df.parse(startDate));
                     } catch (ParseException ex) {
