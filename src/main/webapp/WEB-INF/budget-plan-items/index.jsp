@@ -52,6 +52,7 @@
                                     value="${item[10]}" 
                                     type="number" 
                                     pattern="#,##0.00"/>
+                                ${item[12]}
                             </td>
                             <td class="text-center">
                                 <div class="btn-group-sm">
@@ -63,6 +64,7 @@
                     </c:forEach>
                 </tbody>
             </table>
+            <a class="btn btn-primary" href="budget-plans">Back to Budget Plans</a>
         </div>
     </jsp:body>
 </t:template>

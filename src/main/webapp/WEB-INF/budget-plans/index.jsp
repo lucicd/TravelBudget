@@ -37,6 +37,14 @@
                                 Available Budget
                             </a>
                         </th>
+                        <th class="text-right">
+                            <a href="./budget-plans?sortOrder=${allocatedBudgetSortOrder}&currentFilter=${currentFilter}">
+                                Allocated Budget
+                            </a>
+                        </th>
+                        <th class="text-right">
+                            Leftover
+                        </th>
                         <th class="text-center">Actions</th>
                     </tr>
                 </thead>
@@ -61,9 +69,28 @@
                                     pattern="#,##0.00"/>
                                 ${item[4]}
                             </td>
+                            <td class="text-right">
+                                <fmt:formatNumber 
+                                    value="${item[5]}" 
+                                    type="number" 
+                                    pattern="#,##0.00"/>
+                                ${item[4]}
+                            </td>
+                            <td class="text-right">
+                                <span class="${(item[3] < item[5] ? 'text-danger' : '')}">
+                                    <fmt:formatNumber 
+                                        value="${item[3] - item[5]}" 
+                                        type="number" 
+                                        pattern="#,##0.00"/>
+                                    ${item[4]}
+                                </span>
+                            </td>
                             <td class="text-center">
                                 <div class="btn-group-sm">
-                                    <a class="btn btn-primary" href="./budget-plan-items?action=list&budgetPlanId=${item[0]}">Items</a>
+                                    <a class="btn btn-primary" href="./budget-plan-items?action=list&budgetPlanId=${item[0]}">
+                                        Items
+                                        <span class="badge badge-light">${item[6]}</span>
+                                    </a>
                                     <a class="btn btn-primary" href="./budget-plans?action=edit&id=${item[0]}">Edit</a>
                                     <a class="btn btn-danger" href="./budget-plans?action=confirm-delete&id=${item[0]}">Delete</a>
                                 </div>

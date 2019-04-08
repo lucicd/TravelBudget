@@ -82,6 +82,12 @@ public class BudgetPlanController implements IController {
                 : "availableBudget";
         req.setAttribute("availableBudgetSortOrder", availableBudgetSortOrder);
         
+        String allocatedBudgetSortOrder = 
+                "allocatedBudget".equals(sortOrder) 
+                ? "allocatedBudget_desc" 
+                : "allocatedBudget";
+        req.setAttribute("allocatedBudgetSortOrder", allocatedBudgetSortOrder);
+        
         String searchString = req.getParameter("searchString");
         String currentFilter = req.getParameter("currentFilter");
         if (searchString != null)

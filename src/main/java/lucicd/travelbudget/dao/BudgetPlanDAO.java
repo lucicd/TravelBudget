@@ -37,16 +37,25 @@ public class BudgetPlanDAO {
             session = factory.openSession();
             session.getTransaction().begin();
             StringBuilder sqlBuilder = new StringBuilder()
-                    .append("SELECT SQL_CALC_FOUND_ROWS")
-                    .append(" budget_plans.id id,")
-                    .append(" budget_plans.travel_date travel_date,")
-                    .append(" budget_plans.travel_destination travel_destination,")
-                    .append(" budget_plans.available_budget available_budget,")
-                    .append(" currencies.name currency")
-                    .append(" FROM budget_plans")
-                    .append(" JOIN currencies ON budget_plans.currency_id = currencies.id")
-                    .append(" WHERE budget_plans.travel_destination LIKE :search")
-                    .append(" ORDER BY ");
+                .append("SELECT SQL_CALC_FOUND_ROWS")
+                .append(" budget_plans.id id")
+                .append(", budget_plans.travel_date travel_date")
+                .append(", budget_plans.travel_destination travel_destination")
+                .append(", budget_plans.available_budget available_budget")
+                .append(", currencies.name currency")
+                .append(", COALESCE(SUM(budget_plan_items.cost_in_currency * budget_plan_items.exchange_rate), 0) allocated_budget")
+                .append(", COUNT(budget_plan_items.id) items_count")
+                .append(" FROM budget_plans")
+                .append(" JOIN currencies ON budget_plans.currency_id = currencies.id")
+                .append(" LEFT JOIN budget_plan_items ON budget_plans.id = budget_plan_items.budget_plan_id")
+                .append(" WHERE budget_plans.travel_destination LIKE :search")
+                .append(" GROUP BY")
+                .append(" id")
+                .append(", travel_date")
+                .append(", travel_destination")
+                .append(", available_budget")
+                .append(", currency")
+                .append(" ORDER BY ");
             switch (sortOrder)
             {
                 case "destination":
@@ -63,6 +72,12 @@ public class BudgetPlanDAO {
                     break;
                 case "availableBudget_desc":
                     sqlBuilder.append("available_budget DESC");
+                    break;
+                case "allocatedBudget":
+                    sqlBuilder.append("allocated_budget");
+                    break;
+                case "allocatedBudget_desc":
+                    sqlBuilder.append("allocated_budget DESC");
                     break;
                 default:
                     sqlBuilder.append("travel_date DESC");

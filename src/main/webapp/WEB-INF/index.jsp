@@ -4,9 +4,9 @@
     <jsp:body>
         <div class="jumbotron text-center" style="margin-top: 1rem;">
             <h1 class="display-3">Travel Budget</h1>
-            <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+            <p class="lead">This is Cheryl's and Drazen's travel budget planning application.</p>
             <hr class="my-4">
-            <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+            <p>See you somewhere in the world!</p>
             <a class="btn btn-primary btn-lg" href="budget-plans" role="button">Go to budget plans</a>
         </div>
     </jsp:body>
