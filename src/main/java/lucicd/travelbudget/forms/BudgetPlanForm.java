@@ -9,6 +9,7 @@ public class BudgetPlanForm {
     private String travelDate;
     private String travelDestination;
     private String availableBudget;
+    private String allocatedBudget;
     private String currencyId;
     private String comments;
     private String currencyName;
@@ -46,10 +47,35 @@ public class BudgetPlanForm {
     }
     
     public String getFormattedAvailableBudget() {
-        BigDecimal bd = new BigDecimal(this.availableBudget);
+        String bdStr;
+        if (this.availableBudget == null || this.availableBudget.isEmpty()) {
+            bdStr = "0";
+        } else {
+            bdStr = this.availableBudget;
+        }
+        BigDecimal bd = new BigDecimal(bdStr);
         return new DecimalFormat("#,##0.00").format(bd);
     }
 
+    public String getAllocatedBudget() {
+        return allocatedBudget;
+    }
+
+    public void setAllocatedBudget(String allocatedBudget) {
+        this.allocatedBudget = allocatedBudget;
+    }
+    
+    public String getFormattedAllocatedBudget() {
+        String bdStr;
+        if (this.allocatedBudget == null || this.allocatedBudget.isEmpty()) {
+            bdStr = "0";
+        } else {
+            bdStr = this.allocatedBudget;
+        }
+        BigDecimal bd = new BigDecimal(bdStr);
+        return new DecimalFormat("#,##0.00").format(bd);
+    }
+    
     public void setAvailableBudget(String availableBudget) {
         this.availableBudget = availableBudget;
     }

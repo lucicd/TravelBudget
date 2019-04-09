@@ -13,11 +13,13 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lucicd.travelbudget.beans.BudgetPlan;
 import lucicd.travelbudget.beans.Currency;
 import lucicd.travelbudget.beans.Category;
 import lucicd.travelbudget.exceptions.AppException;
 import lucicd.travelbudget.beans.BudgetPlanItem;
 import lucicd.travelbudget.beans.Setting;
+import lucicd.travelbudget.dao.BudgetPlanDAO;
 import lucicd.travelbudget.dao.CurrencyDAO;
 import lucicd.travelbudget.dao.CategoryDAO;
 import lucicd.travelbudget.dao.BudgetPlanItemDAO;
@@ -39,6 +41,11 @@ public class BudgetPlanItemController implements IController {
             id = req.getParameter("id");
             rec = BudgetPlanItemDAO.getInstance()
                     .getBudgetPlanItem(Integer.parseInt(id));
+            BudgetPlan plan = BudgetPlanDAO.getInstance()
+                    .getBudgetPlan(rec.getBudgetPlanId());
+            Currency currency = CurrencyDAO.getInstance()
+                    .getCurrency(plan.getCurrencyId());
+            req.setAttribute("currency", currency.getName());
         } catch (NumberFormatException ex) {
             throw new AppException("ID is not a number. " + ex.getMessage());
         }
@@ -54,6 +61,10 @@ public class BudgetPlanItemController implements IController {
             List<Object[]> data = BudgetPlanItemDAO
                 .getInstance().getBudgetPlanItems(id);
             req.setAttribute("listData", data);
+            req.setAttribute("totalCost", BudgetPlanDAO.getInstance().getAllocatedBudget(id).toString());
+            BudgetPlan plan = BudgetPlanDAO.getInstance().getBudgetPlan(id);
+            Currency currency = CurrencyDAO.getInstance().getCurrency(plan.getCurrencyId());
+            req.setAttribute("currency", currency.getName());
         } catch (NumberFormatException ex) {
             throw new AppException("BudgetPlanID is not a number. " + ex.getMessage());
         }

@@ -199,6 +199,8 @@ public class BudgetPlanController implements IController {
                 BudgetPlan rec = getOne(req);
                 BudgetPlanForm form = new BudgetPlanForm(rec);
                 form.setCurrencyName(getCurrencyName(rec.getCurrencyId()));
+                Object allocatedBudget = BudgetPlanDAO.getInstance().getAllocatedBudget(rec.getId());
+                form.setAllocatedBudget(allocatedBudget.toString());
                 req.setAttribute("formData", form);
                 req.setAttribute("action", "delete");
                 RequestDispatcher rd = 
@@ -220,6 +222,8 @@ public class BudgetPlanController implements IController {
                 BudgetPlan rec = getOne(req);
                 BudgetPlanForm form = new BudgetPlanForm(rec);
                 form.setCurrencyName(getCurrencyName(rec.getCurrencyId()));
+                Object allocatedBudget = BudgetPlanDAO.getInstance().getAllocatedBudget(rec.getId());
+                form.setAllocatedBudget(allocatedBudget.toString());
                 req.setAttribute("formData", form);
                 req.setAttribute("action", "details");
                 RequestDispatcher rd = 

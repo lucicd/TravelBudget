@@ -5,8 +5,24 @@
     <jsp:body>
         <h1>Budget Plan Items</h1>
         <p>
-            <a class="btn btn-warning"
-               href="./budget-plan-items?action=create&budgetPlanId=${budgetPlanId}">Create</a>
+            <div class="row">
+                <div class="col-sm-3">
+                    <a class="btn btn-warning"
+                        href="./budget-plan-items?action=create&budgetPlanId=${budgetPlanId}">
+                        Create
+                    </a>
+                </div>
+                <div class="col-sm-9">
+                    <span>
+                        Allocated Budget:
+                        <fmt:formatNumber 
+                            value="${totalCost}" 
+                            type="number" 
+                            pattern="#,##0.00"/>
+                        ${currency}
+                    </span>
+                </div>
+            </div>
         </p>
         <div class="table-responsive">
             <table class="table table-bordered table-striped table-hover">

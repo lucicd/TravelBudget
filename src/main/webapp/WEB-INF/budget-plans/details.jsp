@@ -7,22 +7,27 @@
 <t:template title="${title}">
     <jsp:body>
         <h1>${title}</h1>
-        <dl>
-            <dt>Travel Destination</dt>
-            <dd>
+        <dl class="row">
+            <dt class="col-sm-3">Travel Destination</dt>
+            <dd class="col-sm-9">
                 <button class="btn btn-outline-info" id="weatherBtn" data-toggle="modal" data-target="#myModal">
                     ${formData.getTravelDestination()}
                 </button>
             </dd>
-            <dt>Travel Date</dt>
-            <dd>${formData.getTravelDate()}</dd>
-            <dt>Available Budget</dt>
-            <dd>
+            <dt class="col-sm-3">Travel Date</dt>
+            <dd class="col-sm-9">${formData.getTravelDate()}</dd>
+            <dt class="col-sm-3">Available Budget</dt>
+            <dd class="col-sm-9">
                 ${formData.getFormattedAvailableBudget()}
                 ${formData.getCurrencyName()}
             </dd>
-            <dt>Comments</dt>
-            <dd>${formData.getComments()}</dd>
+            <dt class="col-sm-3">Allocated Budget</dt>
+            <dd class="col-sm-9">
+                ${formData.getFormattedAllocatedBudget()}
+                ${formData.getCurrencyName()}
+            </dd>
+            <dt class="col-sm-3">Comments</dt>
+            <dd class="col-sm-9"><pre>${formData.getComments()}</pre></dd>
         </dl>
         <form method="post"
               action="${(action == 'delete') 
@@ -39,7 +44,7 @@
             </c:if>
             <a class="btn btn-primary" href="./budget-plans">Back to list</a>
         </form>
-        
+            
         <div class="modal fade" id="myModal">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -63,13 +68,19 @@
         <script>
             window.onload = function()
             {
-                function makeItem(description, value)
+                function makeItem(description, value, icon)
                 {
                     var list = '<dt class="col-sm-6">';
                     list += description; 
                     list += '</dt>';
                     list += '<dd class="col-sm-6">';
-                    list += value; 
+                    list += value;
+                    if (icon)
+                    {
+                        list += '<span id="icon"><img id="wicon" src="http://openweathermap.org/img/w/'
+                            + icon + '.png"'
+                            + ' alt="Weather icon"></span>';
+                    }
                     list += '</dd>';
                     return list;
                 }
@@ -98,6 +109,29 @@
                     xhr.send();
                 }
                 
+                function getWindDirection(degrees)
+                {
+                    if (degrees <= 22.5) {
+                        return "N";
+                    } else if (degrees <= 67.5) {
+                        return "NE";
+                    } else if (degrees <= 112.5) {
+                        return "E";
+                    } else if (degrees <= 157.5) {
+                        return "SE";
+                    } else if (degrees <= 202.5) {
+                        return "S";
+                    } else if (degrees <= 247.5) {
+                        return "SW";
+                    } else if (degrees <= 292.5) {
+                        return "W";
+                    } else if (degrees <= 337.5) {
+                        return "NW";
+                    } else {
+                        return "N";
+                    }
+                }
+                
                 var myBtn = document.getElementById('weatherBtn');
                 myBtn.onclick = function()
                 {
@@ -113,19 +147,24 @@
                             if (data.clouds.all) {
                                 makeItem('Cloudness:', data.clouds.all + '%');
                             }
-                            list += makeItem('Humidity:', data.main.humidity + '%');
-                            list += makeItem('Pressure:', data.main.pressure + 'hPa');
-                            list += makeItem('Temperature:', data.main.temp.toFixed(0) + '&deg;C');
-                            list += makeItem('Max Temperature:', data.main.temp_max.toFixed(0) + '&deg;C');
-                            list += makeItem('Min Temperature:', data.main.temp_min.toFixed(0) + '&deg;C');
-                            list += makeItem('Wind Speed:', data.wind.speed.toFixed(1) + 'm/s');
+                            list += makeItem('Humidity:', data.main.humidity + ' %');
+                            list += makeItem('Pressure:', data.main.pressure + ' hPa');
+                            list += makeItem('Temperature:', data.main.temp.toFixed(0) + ' &deg;C');
+                            list += makeItem('Max Temperature:', data.main.temp_max.toFixed(0) + ' &deg;C');
+                            list += makeItem('Min Temperature:', data.main.temp_min.toFixed(0) + ' &deg;C');
+                            list += makeItem('Wind Speed:', data.wind.speed.toFixed(1) + ' m/s');
                             if (data.wind.deg) {
-                                list += makeItem('Wind Direction:', data.wind.deg.toFixed(0) + '&deg;');
+                                list += makeItem('Wind Direction:', getWindDirection(data.wind.deg));
                             }
-                            //for (var i = 0; i < data.weather.length; i++)
-                            //{
-                            //    
-                            //}
+                            if (data.weather && data.weather.length > 0)
+                            {
+                                for (var i = 0; i < data.weather.length; i++)
+                                {
+                                    list += makeItem(data.weather[i].main + ':', 
+                                        data.weather[i].description, 
+                                        data.weather[i].icon);
+                                }
+                            }
                             myElm = document.getElementById('weatherList');
                             myElm.innerHTML = list;
                         },

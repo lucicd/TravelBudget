@@ -1,5 +1,6 @@
 package lucicd.travelbudget.dao;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import lucicd.travelbudget.beans.BudgetPlan;
 import lucicd.travelbudget.exceptions.AppException;
@@ -28,7 +29,7 @@ public class BudgetPlanDAO {
         }
         return singleInstance;
     }
-
+    
     public PaginatedList getBudgetPlans(int pageSize, int pageNumber, 
             String search, String sortOrder) 
             throws AppException
@@ -102,6 +103,31 @@ public class BudgetPlanDAO {
         } catch (HibernateException ex) {
             session.getTransaction().rollback();
             throw new AppException("Failed to get budget plans. " + ex.getMessage());
+        } finally {
+            session.close();
+        }
+    }
+
+    public Object getAllocatedBudget(int budgetPlanId) 
+            throws AppException
+    {
+        try {
+            session = factory.openSession();
+            session.getTransaction().begin();
+            StringBuilder sqlBuilder = new StringBuilder()
+                .append("SELECT")
+                .append(" SUM(budget_plan_items.cost_in_currency * budget_plan_items.exchange_rate) allocated_budget")
+                .append(" FROM budget_plan_items")
+                .append(" WHERE budget_plan_items.budget_plan_id = :budgetPlanId");
+            String sql = sqlBuilder.toString();
+            NativeQuery query = session.createSQLQuery(sql);
+            query.setParameter("budgetPlanId", budgetPlanId);
+            Object rec = query.getSingleResult();
+            session.getTransaction().commit();
+            return rec;
+        } catch (HibernateException ex) {
+            session.getTransaction().rollback();
+            throw new AppException("Failed to get allocated budget. " + ex.getMessage());
         } finally {
             session.close();
         }
