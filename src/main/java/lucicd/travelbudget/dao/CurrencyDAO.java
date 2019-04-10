@@ -4,10 +4,12 @@ import lucicd.travelbudget.beans.Currency;
 import lucicd.travelbudget.exceptions.AppException;
 import java.util.List;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.NativeQuery;
 
 public class CurrencyDAO {
@@ -124,9 +126,9 @@ public class CurrencyDAO {
             session.getTransaction().begin();
             session.delete(currency);
             session.getTransaction().commit();
-        } catch (HibernateException ex) {
+        } catch (PersistenceException ex) {
             session.getTransaction().rollback();
-            throw new AppException("Failed to delete currency. " + ex.getMessage());
+            throw new AppException("Failed to delete currency. There could be related records.");
         } finally {
             session.close();
         }

@@ -223,7 +223,11 @@ public class BudgetPlanController implements IController {
                 BudgetPlanForm form = new BudgetPlanForm(rec);
                 form.setCurrencyName(getCurrencyName(rec.getCurrencyId()));
                 Object allocatedBudget = BudgetPlanDAO.getInstance().getAllocatedBudget(rec.getId());
-                form.setAllocatedBudget(allocatedBudget.toString());
+                if (allocatedBudget != null) {
+                    form.setAllocatedBudget(allocatedBudget.toString());
+                } else {
+                    form.setAllocatedBudget("0");
+                }
                 req.setAttribute("formData", form);
                 req.setAttribute("action", "details");
                 RequestDispatcher rd = 

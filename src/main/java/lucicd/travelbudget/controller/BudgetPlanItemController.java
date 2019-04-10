@@ -61,7 +61,12 @@ public class BudgetPlanItemController implements IController {
             List<Object[]> data = BudgetPlanItemDAO
                 .getInstance().getBudgetPlanItems(id);
             req.setAttribute("listData", data);
-            req.setAttribute("totalCost", BudgetPlanDAO.getInstance().getAllocatedBudget(id).toString());
+            Object allocatedBudget = BudgetPlanDAO.getInstance().getAllocatedBudget(id);
+            if (allocatedBudget != null) {
+                req.setAttribute("totalCost", allocatedBudget.toString());
+            } else {
+                req.setAttribute("totalCost", "0");
+            }
             BudgetPlan plan = BudgetPlanDAO.getInstance().getBudgetPlan(id);
             Currency currency = CurrencyDAO.getInstance().getCurrency(plan.getCurrencyId());
             req.setAttribute("currency", currency.getName());

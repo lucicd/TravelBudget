@@ -4,6 +4,7 @@ import lucicd.travelbudget.beans.Category;
 import lucicd.travelbudget.exceptions.AppException;
 import java.util.List;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -105,9 +106,9 @@ public class CategoryDAO {
             session.getTransaction().begin();
             session.delete(category);
             session.getTransaction().commit();
-        } catch (HibernateException ex) {
+        } catch (PersistenceException ex) {
             session.getTransaction().rollback();
-            throw new AppException("Failed to delete category. " + ex.getMessage());
+            throw new AppException("Failed to delete category. There could be related records.");
         } finally {
             session.close();
         }
